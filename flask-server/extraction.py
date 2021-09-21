@@ -29,7 +29,7 @@ def set_path(gamma):
 BASE_FILEPATH = set_path(300)
 SOLUTION_FILENAME = '\PANX_1277_Lv_M_WG_100-JHU-003_LCM3_model_fit.pdf'
 
-def jsonify_extracted_text(text):
+def jsonify_extracted_text(text, data_unique_key):
     """
     Helper function for extract() to format text from PDF into JSON format.
 
@@ -43,6 +43,7 @@ def jsonify_extracted_text(text):
     split_data = text.split()
     
     json = {
+            "id": data_unique_key,
             # cellularity: {cellularity_value}; indexing of -1 is needed to remove ':' from end of the string
             f"{split_data[0][:-1]}": float(split_data[1]),
             # ploidy: {ploidy_value}; indexing of -1 is needed to remove ':' from end of the string
@@ -72,7 +73,7 @@ def extract(path, data, data_unique_key):
         # extracted text
         txt = pageObj.extractText()
         # adding json format extracted data to dictionary
-        data[f"{data_unique_key}"] = jsonify_extracted_text(txt)
+        data.append(jsonify_extracted_text(txt, data_unique_key))
 
     except:
         pass
@@ -106,7 +107,7 @@ def get_gamma_data(base_path, solution_filename, data):
     get_alternate_solutions(base_path, solution_filename, data)
 
 
-# my_data = {}
+# my_data = []
 # get_gamma_data(BASE_FILEPATH, SOLUTION_FILENAME, my_data)
 
-# print({f"{gamma}": my_data})
+# print(my_data)

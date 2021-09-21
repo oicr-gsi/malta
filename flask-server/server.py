@@ -12,12 +12,13 @@ SOLUTION_FILENAME = '\PANX_1277_Lv_M_WG_100-JHU-003_LCM3_model_fit.pdf'
 
 @app.route("/data")
 def data():
-    data = {}   
+    data = []
     gamma = 400
     BASE_FILEPATH = set_path(gamma)
     
     get_gamma_data(BASE_FILEPATH, SOLUTION_FILENAME, data)
-    return {f"{gamma}": data}
+    
+    return {gamma: data}
 
 if __name__ == "__main__":
     app.run(debug=True)

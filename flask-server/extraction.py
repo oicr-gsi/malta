@@ -2,6 +2,7 @@
 import os
 from zipfile import ZipFile
 from PyPDF2 import PdfFileReader
+
 # -----------------------------------------------------------------------------------
 # Unzip sample data 
 
@@ -18,26 +19,24 @@ from PyPDF2 import PdfFileReader
 
 # Extract text data from gamma folders
 
-gammas = [i*100 for i in range(1, 10)]
-
-
 gamma = 300
 
 def set_path(gamma):
-    return f'PANX_1277_gammas\gammas\\{gamma}'
+    return f'PANX_1277_gammas\gammas\\{gamma}\\'
 
 BASE_FILEPATH = set_path(300)
-SOLUTION_FILENAME = '\PANX_1277_Lv_M_WG_100-JHU-003_LCM3_model_fit.pdf'
+SOLUTION_FILENAME = 'PANX_1277_Lv_M_WG_100-JHU-003_LCM3_model_fit.pdf'
 
 def jsonify_extracted_text(text, data_unique_key):
     """
-    Helper function for extract() to format text from PDF into JSON format.
+    Helper function for extract() to format extracted text into JSON format.
 
     Args:
         text: String, text extracted from PDF
+        data_unique_key: Integer, a unique id each solution for a given value of gamma. -1 is the solution in the main folder.
 
     Returns:
-        Dictionary with cellularity, ploidy and sd.BAF values
+        Dictionary with id, cellularity, ploidy, and sd.BAF values
     """
     
     split_data = text.split()
@@ -59,10 +58,9 @@ def extract(path, data, data_unique_key):
     Extracts text data from PDF and stores it in a dictionary for a given gamme
 
     Args:
-        gamma: Integer, desired gamma value
         path: String, file path to PDF
-        data_unique_key: Integer, a unique id each solution for a given value of gamma. -1 is the solution in the main folder.
-        ideal: Boolean, optional argument to distinguish between ideal and alternate solutions
+        data: List, variable to store extracted data
+        data_unique_key: Integer, a unique id each solution for a given value of gamma. -1 is the id for solution in the main folder.
     """
 
     pdf = PdfFileReader(path)
@@ -82,6 +80,15 @@ def get_alternate_solutions(base_path, solution_filename, data):
     """
     Extracts text data from all alternate solutions folder for a given gamma
 
+    Args:
+        base_path: String, file path to specified gamma folder 
+            ex. PANX_1277_gammas\gammas\\300\\
+
+        solution_filename: String, name of solution file
+            ex. PANX_1277_Lv_M_WG_100-JHU-003_LCM3_model_fit.pdf
+
+        data: List, variable to store extracted data
+
     """
     
     # List of subfolders (alternate solutions) in current directory
@@ -89,17 +96,21 @@ def get_alternate_solutions(base_path, solution_filename, data):
 
     # extracting text data from every model_fit file that is in a solution subfolder
     for idx, alt_solution in enumerate(alternate_solution_folders):
-        alt_solution_path = alt_solution + solution_filename
+        alt_solution_path = alt_solution + '\\' + solution_filename
         extract(alt_solution_path, data, data_unique_key=idx)
 
 
 def get_gamma_data(base_path, solution_filename, data):
-    """"
+    """
     Extracts all text data for a given gamma
 
-    Args:
-        gamma: Integer, desired gamma value
-        filepath: String, file path to gamma value folder
+    base_path: String, file path to specified gamma folder 
+            ex. PANX_1277_gammas\gammas\\300
+            
+    solution_filename: String, name of solution file
+        ex. PANX_1277_Lv_M_WG_100-JHU-003_LCM3_model_fit.pdf
+
+    data: List, variable to store extracted data
     
     """
     ideal_solution_filepath = base_path + solution_filename
@@ -107,6 +118,7 @@ def get_gamma_data(base_path, solution_filename, data):
     get_alternate_solutions(base_path, solution_filename, data)
 
 
+#testing code
 # my_data = []
 # get_gamma_data(BASE_FILEPATH, SOLUTION_FILENAME, my_data)
 

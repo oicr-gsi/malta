@@ -14,11 +14,16 @@ function App() {
 
   useEffect(() => {
     setLoading(true);
-    fetch("/members")
-      .then((res) => res.json())
-      .then((data) => {
+    fetch("/pdf")
+      .then((res) => {
+        res.json();
+        console.log(res);
         setData(data);
         console.log(data);
+      })
+      .then((data) => {
+        // setData(data);
+        // console.log(data);
       })
       .catch((err) => {
         setError(err);
@@ -30,9 +35,11 @@ function App() {
 
   return (
     <>
-      <ul>
+      {/* <ul>
         {data && data["members"].map((item, idx) => <li key={idx}>{item}</li>)}
-      </ul>
+      </ul> */}
+      <>hi</>
+      <br />
       <Screen />
     </>
   );

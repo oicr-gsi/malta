@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, send_file
 from extraction import get_gamma_data, set_path
 app = Flask(__name__)
 
@@ -15,10 +15,16 @@ def data():
     data = []
     gamma = 400
     BASE_FILEPATH = set_path(gamma)
-    
+    pdf = BASE_FILEPATH + SOLUTION_FILENAME    
     get_gamma_data(BASE_FILEPATH, SOLUTION_FILENAME, data)
     
     return {gamma: data}
+
+@app.route("/pdf")
+def send_pdf():
+    BASE_FILEPATH = set_path(400)
+    pdf = BASE_FILEPATH + SOLUTION_FILENAME  
+    return send_file(pdf)  
 
 if __name__ == "__main__":
     app.run(debug=True)

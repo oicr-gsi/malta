@@ -33,6 +33,7 @@ function App() {
       <ul>
         {data && data["members"].map((item, idx) => <li key={idx}>{item}</li>)}
       </ul>
+      <Screen />
     </>
   );
 }

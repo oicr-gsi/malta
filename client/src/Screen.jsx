@@ -7,7 +7,7 @@ export const Screen = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch("/members")
+    fetch("/data")
       .then((res) => res.json())
       .then((data) => {
         setData(data);
@@ -21,9 +21,5 @@ export const Screen = () => {
       });
   }, []);
 
-  return (
-    <ul>
-      {data && data["members"].map((item, idx) => <li key={idx}>{item}</li>)}
-    </ul>
-  );
+  return <>data</>;
 };

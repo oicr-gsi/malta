@@ -29,9 +29,11 @@ function App() {
   }, []);
 
   return (
-    <ul>
-      {data && data["members"].map((item, idx) => <li key={idx}>{item}</li>)}
-    </ul>
+    <>
+      <ul>
+        {data && data["members"].map((item, idx) => <li key={idx}>{item}</li>)}
+      </ul>
+    </>
   );
 }
 

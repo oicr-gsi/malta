@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { DropdownButton, Dropdown, Button } from "react-bootstrap";
 
 interface Data {
   gamma: SolutionData[];
@@ -16,26 +18,30 @@ interface SolutionData {
 export const GammaSelection = () => {
   const [data, setData] = useState<Data>();
   const [PDF, setPDF] = useState<String>();
-  const [gamma, setGamma] = useState<Number>(300);
+  const [gamma, setGamma] = useState<any>();
   const [loading, setLoading] = useState<Boolean>(false);
   const [error, setError] = useState<Boolean>();
   const [images, setImages] = useState<String[]>([]);
 
-  useEffect(() => {
+  const gammaOptions = [
+    50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1250, 1500, 2000,
+  ];
+
+  const getData = (selectedGamma: Number) => {
     let pdfs = [];
 
     setLoading(true);
-    fetch(`/data/${gamma}`, {
+    fetch(`/data/${selectedGamma}`, {
       method: "POST",
     })
       .then((res) => res.json())
       .then((data) => {
         setData(data);
         console.log(data);
-        for (let i = 0; i < data[`${gamma}`].length; i++) {
+        for (let i = 0; i < data[`${selectedGamma}`].length; i++) {
           fetch("/pdf", {
             method: "POST",
-            body: JSON.stringify(data[`${gamma}`][i]["path"]),
+            body: JSON.stringify(data[`${selectedGamma}`][i]["path"]),
           })
             .then((res) => res.blob())
             .then((blob) => {
@@ -52,12 +58,32 @@ export const GammaSelection = () => {
       .finally(() => {
         setLoading(false);
       });
+  };
 
-    // setLoading(true);
-  }, []);
+  const handleSelect = (e) => {
+    e.preventDefault();
+    setGamma(e.target.value);
+    console.log("after change:", gamma);
+    getData(gamma);
+  };
 
   return (
     <>
+      {/* <DropdownButton title="Select Gamma" onSelect={handleSelect}>
+        {gammaOptions.map((option, i) => (
+          <Dropdown.Item eventKey={`${option}`} key={i}>
+            {option}
+          </Dropdown.Item>
+        ))}
+      </DropdownButton> */}
+      <select name="select gamma" id="dropdown" onChange={handleSelect}>
+        {gammaOptions &&
+          gammaOptions.map((option, i) => (
+            <option value={`${option}`} key={i}>
+              {option}
+            </option>
+          ))}
+      </select>
       {`gamma: ${gamma}`}
       {loading ? (
         <p>Loading...</p>

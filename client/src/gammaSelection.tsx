@@ -1,13 +1,25 @@
-import { pbkdf2Sync } from "crypto";
 import React, { useState, useEffect } from "react";
 
-export const Screen = () => {
-  const [data, setData] = useState();
-  const [PDF, setPDF] = useState();
-  const [gamma, setGamma] = useState(300);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState();
-  const [images, setImages] = useState([]);
+interface Data {
+  gamma: SolutionData[];
+}
+
+interface SolutionData {
+  id: Number;
+  cellularity: Number;
+  ploidy: Number;
+  // quotes required to prevent '.' from creating an error
+  "sd.BAF": Number;
+  path: String;
+}
+
+export const GammaSelection = () => {
+  const [data, setData] = useState<Data>();
+  const [PDF, setPDF] = useState<String>();
+  const [gamma, setGamma] = useState<Number>(300);
+  const [loading, setLoading] = useState<Boolean>(false);
+  const [error, setError] = useState<Boolean>();
+  const [images, setImages] = useState<String[]>([]);
 
   useEffect(() => {
     let pdfs = [];
@@ -46,21 +58,25 @@ export const Screen = () => {
 
   return (
     <>
-      {PDF && (
-        <object data={PDF} width="500" height="500" type="application/pdf" />
-      )}
       {`gamma: ${gamma}`}
-      {data &&
-        data[`${gamma}`].map((sol, i) => (
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        !loading &&
+        data &&
+        data[`${gamma}`].map((sol: any, i) => (
           <p key={i}>{`cellularity: ${sol["cellularity"]}`}</p>
-        ))}
+        ))
+      )}
 
-      {images &&
+      {!loading &&
+        images &&
         images.map((image, i) => (
-          <object
-            data={image}
-            width="500"
-            height="500"
+          <embed
+            // #toolbar=0 is needed to remove built-in pdf viewer and make it look like an image
+            src={image + "#toolbar=0"}
+            width="350"
+            height="350"
             type="application/pdf"
             key={i}
           />

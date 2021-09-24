@@ -18,11 +18,14 @@ from dotenv import load_dotenv
 # -----------------------------------------------------------------------------------
 
 # Extract text data from gamma folders
+def get_gamma_options(path):
+    gamma_options = sorted([int(f.name) for f in os.scandir(path) if f.is_dir()])
+    return gamma_options
 
 
 def set_path(gamma):
     load_dotenv()
-    return (str(os.getenv("PATH_TO_DATA")) + f'{gamma}/')
+    return (str(os.getenv("PATH_TO_DATA")) + f'//{gamma}/')
 
 
 def jsonify_extracted_text(path, text, data_unique_key):

@@ -22,6 +22,9 @@ export const GammaSelection = () => {
   const [images, setImages] = useState<any>();
 
   useEffect(() => {
+    fetch("/gamma_options")
+      .then((res) => res.json())
+      .then((data) => console.log(data));
     getData();
   }, [gamma]);
 

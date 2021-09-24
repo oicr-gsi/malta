@@ -1,10 +1,16 @@
 from flask import Flask, send_file, request
-from extraction import get_gamma_data, set_path
+from extraction import get_gamma_data, set_path, get_gamma_options
 import os
 
 app = Flask(__name__)
 
 SOLUTION_FILENAME = str(os.getenv("SOLUTION_FILENAME"))
+
+@app.route("/gamma_options")
+def gamma_options():
+    # this function will need to take a file path argument later on
+    path = os.getenv("PATH_TO_DATA")
+    return {"options": get_gamma_options(path)}
 
 @app.route("/data/<int:gamma>", methods=['POST'])
 def data(gamma):

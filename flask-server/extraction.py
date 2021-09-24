@@ -54,16 +54,18 @@ def jsonify_extracted_text(path, text, data_unique_key):
     
     return json
 
-def extract(path, data, data_unique_key):
+def extract(path, data_unique_key):
     """
-    Extracts text data from PDF and stores it in a dictionary for a given gamme
+    Extracts text data from PDF and stores it in a dictionary for a given gamma
 
     Args:
         path: String, file path to PDF
-        data: List, variable to store extracted data
         data_unique_key: Integer, a unique id each solution for a given value of gamma. -1 is the id for solution in the main folder.
-    """
 
+    Returns:
+        data: Dictionary, extracted data from one PDF file
+    """
+    data = {}
     pdf = PdfFileReader(path)
 
         # model_fit files have one page only, hence getPage(0) 
@@ -72,12 +74,14 @@ def extract(path, data, data_unique_key):
         # extracted text
         txt = pageObj.extractText()
         # adding json format extracted data to dictionary
-        data.append(jsonify_extracted_text(path, txt, data_unique_key))
+        data = jsonify_extracted_text(path, txt, data_unique_key)
 
     except:
         pass
+    
+    return data
 
-def get_alternate_solutions(base_path, solution_filename, data):
+def get_alternate_solutions(base_path, solution_filename):
     """
     Extracts text data from all alternate solutions folder for a given gamma
 
@@ -95,34 +99,45 @@ def get_alternate_solutions(base_path, solution_filename, data):
     # List of subfolders (alternate solutions) in current directory
     alternate_solution_folders = [f.path for f in os.scandir(base_path) if f.is_dir()]
 
+    alternate_solutions_data = []
     # extracting text data from every model_fit file that is in a solution subfolder
     for idx, alt_solution in enumerate(alternate_solution_folders):
-        alt_solution_path = alt_solution + '\\' + solution_filename
-        extract(alt_solution_path, data, data_unique_key=idx)
+        alt_solution_path = alt_solution + '/' + solution_filename
+        alternate_solutions_data.append(extract(alt_solution_path, data_unique_key=idx))
+    
+    return alternate_solutions_data
 
 
-def get_gamma_data(base_path, solution_filename, data):
+def get_gamma_data(base_path, solution_filename):
     """
     Extracts all text data for a given gamma
 
-    base_path: String, file path to specified gamma folder 
-            ex. PANX_1277_gammas\gammas\\300
-            
-    solution_filename: String, name of solution file
-        ex. PANX_1277_Lv_M_WG_100-JHU-003_LCM3_model_fit.pdf
+    Args:
+        base_path: String, file path to specified gamma folder 
+                ex. PANX_1277_gammas\gammas\\300
+                
+        solution_filename: String, name of solution file
+            ex. PANX_1277_Lv_M_WG_100-JHU-003_LCM3_model_fit.pdf
 
-    data: List, variable to store extracted data
-    
+    Returns:
+        data: List, extracted data from all model_fit files for a given gamma
     """
+    data = []
+
     ideal_solution_filepath = base_path + solution_filename
-    extract(ideal_solution_filepath, data, -1)
-    get_alternate_solutions(base_path, solution_filename, data)
+    ideal_solution_data = extract(ideal_solution_filepath, -1)
+    data.append(ideal_solution_data)
+    alternate_solution_data = get_alternate_solutions(base_path, solution_filename)
+    
+    for alt_sol in alternate_solution_data:
+        data.append(alt_sol)
+
+    return data
 
 
-#testing code
+# #testing code
 # load_dotenv()
-# BASE_FILEPATH = set_path(300)
-# my_data = []
-# get_gamma_data(BASE_FILEPATH, str(os.getenv("SOLUTION_FILENAME")), my_data)
+# BASE_FILEPATH = set_path(800)
+# my_data = get_gamma_data(BASE_FILEPATH, str(os.getenv("SOLUTION_FILENAME")))
 
 # print(my_data)

@@ -16,7 +16,7 @@ interface SolutionData {
 export const GammaSelection = () => {
   const [data, setData] = useState<Data>();
   const [PDF, setPDF] = useState<String>();
-  const [gamma, setGamma] = useState<any>();
+  const [gamma, setGamma] = useState<any>(100);
   const [loading, setLoading] = useState<Boolean>(false);
   const [error, setError] = useState<Boolean>();
   const [images, setImages] = useState<any>();

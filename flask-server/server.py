@@ -9,12 +9,10 @@ SOLUTION_FILENAME = str(os.getenv("SOLUTION_FILENAME"))
 @app.route("/data/<int:gamma>", methods=['POST'])
 def data(gamma):
     if request.method == 'POST':
-        data = []
         print("gamma from front end", gamma)
         BASE_FILEPATH = set_path(gamma)
-        pdf = BASE_FILEPATH + SOLUTION_FILENAME    
-        get_gamma_data(BASE_FILEPATH, SOLUTION_FILENAME, data)
-
+        data = []
+        data = get_gamma_data(BASE_FILEPATH, SOLUTION_FILENAME)
         return {gamma: data}
 
 @app.route("/pdf", methods=['POST'])

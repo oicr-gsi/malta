@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { DropdownButton, Dropdown, Button } from "react-bootstrap";
 
 interface Data {
   gamma: SolutionData[];
@@ -21,27 +19,27 @@ export const GammaSelection = () => {
   const [gamma, setGamma] = useState<any>();
   const [loading, setLoading] = useState<Boolean>(false);
   const [error, setError] = useState<Boolean>();
-  const [images, setImages] = useState<String[]>([]);
+  const [images, setImages] = useState<any>();
 
-  const gammaOptions = [
-    50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1250, 1500, 2000,
-  ];
+  useEffect(() => {
+    getData();
+  }, [gamma]);
 
-  const getData = (selectedGamma: Number) => {
+  const getData = () => {
     let pdfs = [];
 
     setLoading(true);
-    fetch(`/data/${selectedGamma}`, {
+    fetch(`/data/${gamma}`, {
       method: "POST",
     })
       .then((res) => res.json())
       .then((data) => {
         setData(data);
         console.log(data);
-        for (let i = 0; i < data[`${selectedGamma}`].length; i++) {
+        for (let i = 0; i < data[`${gamma}`].length; i++) {
           fetch("/pdf", {
             method: "POST",
-            body: JSON.stringify(data[`${selectedGamma}`][i]["path"]),
+            body: JSON.stringify(data[`${gamma}`][i]["path"]),
           })
             .then((res) => res.blob())
             .then((blob) => {
@@ -59,54 +57,63 @@ export const GammaSelection = () => {
         setLoading(false);
       });
   };
-
-  const handleSelect = (e) => {
-    e.preventDefault();
-    setGamma(e.target.value);
-    console.log("after change:", gamma);
-    getData(gamma);
-  };
-
+  let renderImages;
+  if (images) {
+    renderImages = images.map((image, i) => (
+      <embed
+        // #toolbar=0 is needed to remove built-in pdf viewer and make it look like an image
+        src={image + "#toolbar=0"}
+        width="350"
+        height="350"
+        type="application/pdf"
+        key={i}
+      />
+    ));
+  }
+  let displayData;
+  // if (data) {
+  //   displayData = data[`${gamma}`].map((sol: any, i) => (
+  //     <p key={i}>{`cellularity: ${sol["cellularity"]}`}</p>
+  //   ));
+  // }
+  let options = [100, 200, 400, 500, 800, 2000];
   return (
     <>
-      {/* <DropdownButton title="Select Gamma" onSelect={handleSelect}>
-        {gammaOptions.map((option, i) => (
-          <Dropdown.Item eventKey={`${option}`} key={i}>
+      {/* {`gamma: ${gamma}`} */}
+      gamma:
+      <select
+        value={gamma}
+        onChange={(e) => {
+          setGamma(e.target.value);
+        }}
+      >
+        {options.map((option, i) => (
+          <option key={i} value={option}>
             {option}
-          </Dropdown.Item>
+          </option>
         ))}
-      </DropdownButton> */}
-      <select name="select gamma" id="dropdown" onChange={handleSelect}>
-        {gammaOptions &&
-          gammaOptions.map((option, i) => (
-            <option value={`${option}`} key={i}>
-              {option}
-            </option>
-          ))}
       </select>
-      {`gamma: ${gamma}`}
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        !loading &&
-        data &&
-        data[`${gamma}`].map((sol: any, i) => (
-          <p key={i}>{`cellularity: ${sol["cellularity"]}`}</p>
-        ))
-      )}
-
-      {!loading &&
-        images &&
-        images.map((image, i) => (
-          <embed
-            // #toolbar=0 is needed to remove built-in pdf viewer and make it look like an image
-            src={image + "#toolbar=0"}
-            width="350"
-            height="350"
-            type="application/pdf"
-            key={i}
-          />
-        ))}
+      <br />
+      <label htmlFor="ploidy">ploidy: </label>
+      <input type="text" name="ploidy" id="" />
+      <br />
+      <label htmlFor="cellularity">cellularity:</label>
+      <input type="text" name="cellularity" id="" />
+      <br />
+      <label htmlFor="sd.BAF">sd.BAF: </label>
+      <input type="text" name="sd.BAF" id="" />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      {/* <select name="select" id="">
+        <option value="300">300</option>
+        <option value="400">400</option>
+        <option value="500">500</option>
+      </select> */}
+      {images && renderImages}
     </>
   );
 };

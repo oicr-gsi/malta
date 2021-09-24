@@ -2,7 +2,7 @@
 import os
 from zipfile import ZipFile
 from PyPDF2 import PdfFileReader
-
+from dotenv import load_dotenv
 # -----------------------------------------------------------------------------------
 # Unzip sample data 
 
@@ -19,13 +19,11 @@ from PyPDF2 import PdfFileReader
 
 # Extract text data from gamma folders
 
-gamma = 300
 
 def set_path(gamma):
-    return f'PANX_1277_gammas\gammas\\{gamma}\\'
+    load_dotenv()
+    return (str(os.getenv("PATH_TO_DATA")) + f'{gamma}/')
 
-BASE_FILEPATH = set_path(300)
-SOLUTION_FILENAME = 'PANX_1277_Lv_M_WG_100-JHU-003_LCM3_model_fit.pdf'
 
 def jsonify_extracted_text(path, text, data_unique_key):
     """
@@ -122,7 +120,9 @@ def get_gamma_data(base_path, solution_filename, data):
 
 
 #testing code
+# load_dotenv()
+# BASE_FILEPATH = set_path(300)
 # my_data = []
-# get_gamma_data(BASE_FILEPATH, SOLUTION_FILENAME, my_data)
+# get_gamma_data(BASE_FILEPATH, str(os.getenv("SOLUTION_FILENAME")), my_data)
 
 # print(my_data)

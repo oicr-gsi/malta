@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col, Button, Spinner } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import {
+  SubmitButton,
+  Textbox,
+  FormInputLabel,
+  DropdownOption,
+} from "./gammaSelectionStyles";
 
 interface Data {
   gamma: SolutionData[];
@@ -23,6 +29,7 @@ export const GammaSelection = () => {
   const [error, setError] = useState<Boolean>();
   const [images, setImages] = useState<any>();
   const [options, setOptions] = useState([]);
+  const [selectedPlot, setSelectedPlot] = useState(0);
 
   useEffect(() => {
     getData();
@@ -84,7 +91,13 @@ export const GammaSelection = () => {
   let renderImages;
   if (images) {
     renderImages = images.map((image, i) => (
-      <span style={{ padding: "2vw" }}>
+      <span
+        style={{ padding: "2vw" }}
+        onClick={() => {
+          setSelectedPlot(i);
+          console.log(selectedPlot);
+        }}
+      >
         <embed
           // #toolbar=0 is needed to remove built-in pdf viewer and make it look like an image
           src={image + "#toolbar=0"}
@@ -122,10 +135,17 @@ export const GammaSelection = () => {
         ))}
       </select>
       <br /> */}
+
       <Container style={{ paddingTop: "2vh" }}>
+        <p>
+          Select a gamma value to get started. Choose a solution by clicking on
+          a plot.
+        </p>
         <Row>
           <Col>
-            gamma:
+            <FormInputLabel>
+              <span style={{ paddingRight: "4px" }}>Gamma </span>
+            </FormInputLabel>
             <select
               value={gamma}
               onChange={(e) => {
@@ -134,9 +154,9 @@ export const GammaSelection = () => {
             >
               {options[`options`] ? (
                 options[`options`].map((option, key) => (
-                  <option key={key} value={option}>
+                  <DropdownOption key={key} value={option}>
                     {option}
-                  </option>
+                  </DropdownOption>
                 ))
               ) : (
                 <>loading...</>
@@ -144,21 +164,35 @@ export const GammaSelection = () => {
             </select>
           </Col>
           <Col>
-            <label htmlFor="cellularity">cellularity:</label>
+            <FormInputLabel>Cellularity</FormInputLabel>
             <span> </span>
-            <input type="text" name="cellularity" id="" />
+            <Textbox type="text" name="cellularity" />
+            {/* <input
+              type="text"
+              name="cellularity"
+              id=""
+              value={data ? data[`${gamma}`][selectedPlot]["cellularity"] : " "}
+            /> */}
           </Col>
           <Col>
-            <label htmlFor="ploidy">ploidy:</label>
+            <FormInputLabel>Ploidy</FormInputLabel>
             <span> </span>
-            <input type="text" name="ploidy" id="" />
+            <Textbox type="text" name="ploidy" />
+          </Col>
+          <Col>
+            <div style={{ paddingTop: "5px" }}></div>
+            <SubmitButton>Submit</SubmitButton>
           </Col>
         </Row>
       </Container>
       <br />
       {
-        <Container>
-          {loading ? <>Loading...</> : images && renderImages}
+        <Container style={{ paddingTop: "5vh" }}>
+          {loading ? (
+            <Spinner animation="border" variant="success" />
+          ) : (
+            images && renderImages
+          )}
         </Container>
       }
     </>

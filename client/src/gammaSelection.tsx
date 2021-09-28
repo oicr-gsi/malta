@@ -5,6 +5,8 @@ import {
   SubmitButton,
   Textbox,
   FormInputLabel,
+  DropdownLabel,
+  Dropdown,
   DropdownOption,
 } from "./gammaSelectionStyles";
 
@@ -140,13 +142,13 @@ export const GammaSelection = () => {
         <p>
           Select a gamma value to get started. Choose a solution by clicking on
           a plot.
+          {/* gamma represents how much DNA was chopped; each plot is a local max/min; djerba will query DB; dont worry too much about clicking on an image*/}
         </p>
         <Row>
-          <Col>
-            <FormInputLabel>
-              <span style={{ paddingRight: "4px" }}>Gamma </span>
-            </FormInputLabel>
-            <select
+          <Col style={{ textAlign: "center" }}>
+            <DropdownLabel>Gamma</DropdownLabel>
+            <br />
+            <Dropdown
               value={gamma}
               onChange={(e) => {
                 setGamma(e.target.value);
@@ -154,33 +156,27 @@ export const GammaSelection = () => {
             >
               {options[`options`] ? (
                 options[`options`].map((option, key) => (
-                  <DropdownOption key={key} value={option}>
-                    {option}
-                  </DropdownOption>
+                  <>
+                    <DropdownOption key={key} value={option}>
+                      {option}
+                    </DropdownOption>
+                    {/* <hr style={{ color: "blue" }} /> */}
+                  </>
                 ))
               ) : (
                 <>loading...</>
               )}
-            </select>
+            </Dropdown>
           </Col>
           <Col>
             <FormInputLabel>Cellularity</FormInputLabel>
-            <span> </span>
             <Textbox type="text" name="cellularity" />
-            {/* <input
-              type="text"
-              name="cellularity"
-              id=""
-              value={data ? data[`${gamma}`][selectedPlot]["cellularity"] : " "}
-            /> */}
           </Col>
           <Col>
             <FormInputLabel>Ploidy</FormInputLabel>
-            <span> </span>
             <Textbox type="text" name="ploidy" />
           </Col>
-          <Col>
-            <div style={{ paddingTop: "5px" }}></div>
+          <Col style={{ position: "relative" }}>
             <SubmitButton>Submit</SubmitButton>
           </Col>
         </Row>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 interface Data {
@@ -144,25 +144,23 @@ export const GammaSelection = () => {
             </select>
           </Col>
           <Col>
-            <label htmlFor="ploidy">ploidy:</label>
-            <span> </span>
-            <input type="text" name="ploidy" id="" />
-          </Col>
-          <Col>
             <label htmlFor="cellularity">cellularity:</label>
             <span> </span>
             <input type="text" name="cellularity" id="" />
           </Col>
+          <Col>
+            <label htmlFor="ploidy">ploidy:</label>
+            <span> </span>
+            <input type="text" name="ploidy" id="" />
+          </Col>
         </Row>
       </Container>
-
       <br />
-
-      <br />
-      <br />
-      <br />
-      <Container>{images && renderImages}</Container>
-      {/* {!loading && data && renderImages} */}
+      {
+        <Container>
+          {loading ? <>Loading...</> : images && renderImages}
+        </Container>
+      }
     </>
   );
 };

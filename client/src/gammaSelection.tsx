@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { Container, Row, Col } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 interface Data {
   gamma: SolutionData[];
@@ -82,14 +84,16 @@ export const GammaSelection = () => {
   let renderImages;
   if (images) {
     renderImages = images.map((image, i) => (
-      <embed
-        // #toolbar=0 is needed to remove built-in pdf viewer and make it look like an image
-        src={image + "#toolbar=0"}
-        width="500"
-        height="500"
-        type="application/pdf"
-        key={i}
-      />
+      <span style={{ padding: "2vw" }}>
+        <embed
+          // #toolbar=0 is needed to remove built-in pdf viewer and make it look like an image
+          src={image + "#toolbar=0"}
+          width="500"
+          height="500"
+          type="application/pdf"
+          key={i}
+        />
+      </span>
     ));
   }
 
@@ -105,35 +109,59 @@ export const GammaSelection = () => {
   //     />
   //   ));
   // }
+  const files = ["file1", "file2"];
+
   return (
     <>
-      gamma:
-      <select
-        value={gamma}
-        onChange={(e) => {
-          setGamma(e.target.value);
-        }}
-      >
-        {options[`options`] ? (
-          options[`options`].map((option, key) => (
-            <option key={key} value={option}>
-              {option}
-            </option>
-          ))
-        ) : (
-          <>loading...</>
-        )}
+      {/* choose file
+      <select name="choose file" id="">
+        {files.map((file, key) => (
+          <option key={key} value={file}>
+            {file}
+          </option>
+        ))}
       </select>
+      <br /> */}
+      <Container style={{ paddingTop: "2vh" }}>
+        <Row>
+          <Col>
+            gamma:
+            <select
+              value={gamma}
+              onChange={(e) => {
+                setGamma(e.target.value);
+              }}
+            >
+              {options[`options`] ? (
+                options[`options`].map((option, key) => (
+                  <option key={key} value={option}>
+                    {option}
+                  </option>
+                ))
+              ) : (
+                <>loading...</>
+              )}
+            </select>
+          </Col>
+          <Col>
+            <label htmlFor="ploidy">ploidy:</label>
+            <span> </span>
+            <input type="text" name="ploidy" id="" />
+          </Col>
+          <Col>
+            <label htmlFor="cellularity">cellularity:</label>
+            <span> </span>
+            <input type="text" name="cellularity" id="" />
+          </Col>
+        </Row>
+      </Container>
+
       <br />
-      <label htmlFor="ploidy">ploidy: </label>
-      <input type="text" name="ploidy" id="" />
-      <br />
-      <label htmlFor="cellularity">cellularity:</label>
-      <input type="text" name="cellularity" id="" />
+
       <br />
       <br />
       <br />
-      {images && renderImages}
+      <Container>{images && renderImages}</Container>
       {/* {!loading && data && renderImages} */}
     </>
   );

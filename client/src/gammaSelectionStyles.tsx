@@ -3,10 +3,11 @@ import styled from "styled-components";
 import { Theme } from "./globalStyles";
 
 const { lightGreen, darkGreen, white, black, gray } = Theme;
+const fontSize = "18px";
 
 export const Textbox = styled.input`
   background-color: ${lightGreen};
-  font-size: 18px;
+  font-size: ${fontSize};
   font-weight: 600;
   color: ${white};
   border: none;
@@ -15,7 +16,7 @@ export const Textbox = styled.input`
 
 export const SubmitButton = styled(Button)`
   background-color: ${darkGreen};
-  font-size: 18px;
+  font-size: ${fontSize};
   font-weight: 600;
   width: 180px;
   color: ${white};
@@ -23,8 +24,8 @@ export const SubmitButton = styled(Button)`
   border-radius: 30px;
   position: absolute;
   text-align: center;
-
   top: 35%;
+
   &:hover {
     background-color: ${lightGreen};
   }
@@ -44,7 +45,7 @@ export const Dropdown = styled.select`
   background-color: ${darkGreen};
   color: ${white};
   opacity: 0.7;
-  font-size: 18px;
+  font-size: ${fontSize};
   font-weight: 400;
 `;
 

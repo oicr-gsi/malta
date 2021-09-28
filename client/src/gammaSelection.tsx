@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { DropDownOptions } from "./dropdownOptions";
 
 interface Data {
   gamma: SolutionData[];
@@ -21,57 +20,39 @@ export const GammaSelection = () => {
   const [loading, setLoading] = useState<Boolean>(false);
   const [error, setError] = useState<Boolean>();
   const [images, setImages] = useState<any>();
-  const [options, setOptions] = useState([]);
 
   useEffect(() => {
+    fetch("/gamma_options")
+      .then((res) => res.json())
+      .then((data) => console.log(data));
     getData();
   }, [gamma]);
 
-  useEffect(() => {
-    setLoading(true);
-    fetch("/gamma_options")
-      .then((res) => res.json())
-      .then((res) => {
-        setOptions(res);
-        console.log(options);
-      })
-      .finally(() => setLoading(false));
-  }, []);
-
-  // useEffect(() => {
-  //   console.log(gamma);
-  // }, [gamma]);
-
   const getData = () => {
     let pdfs = [];
-    let gamma_data;
 
     setLoading(true);
     fetch(`/data/${gamma}`, {
       method: "POST",
     })
       .then((res) => res.json())
-      .then((res) => {
-        gamma_data = res;
-
-        for (let i = 0; i < gamma_data[`${gamma}`].length; i++) {
+      .then((data) => {
+        setData(data);
+        console.log(data);
+        for (let i = 0; i < data[`${gamma}`].length; i++) {
           fetch("/pdf", {
             method: "POST",
-            body: JSON.stringify(gamma_data[`${gamma}`][i]["path"]),
+            body: JSON.stringify(data[`${gamma}`][i]["path"]),
           })
             .then((res) => res.blob())
             .then((blob) => {
               let objectURL = URL.createObjectURL(blob);
               pdfs.push(objectURL);
               setPDF(objectURL);
-              gamma_data[`${gamma}`][i]["path"] = objectURL;
             });
+          setImages(pdfs);
         }
-        setImages(pdfs);
-        setData(gamma_data);
-        console.log(data);
       })
-
       .catch((err) => {
         setError(err);
       })
@@ -79,35 +60,29 @@ export const GammaSelection = () => {
         setLoading(false);
       });
   };
-
   let renderImages;
   if (images) {
     renderImages = images.map((image, i) => (
       <embed
         // #toolbar=0 is needed to remove built-in pdf viewer and make it look like an image
         src={image + "#toolbar=0"}
-        width="500"
-        height="500"
+        width="350"
+        height="350"
         type="application/pdf"
         key={i}
       />
     ));
   }
-
+  let displayData;
   // if (data) {
-  //   renderImages = data[`${gamma}`].map((solution, i) => (
-  //     <embed
-  //       // #toolbar=0 is needed to remove built-in pdf viewer and make it look like an image
-  //       src={solution["path"] + "#toolbar=0"}
-  //       width="350"
-  //       height="350"
-  //       type="application/pdf"
-  //       key={i}
-  //     />
+  //   displayData = data[`${gamma}`].map((sol: any, i) => (
+  //     <p key={i}>{`cellularity: ${sol["cellularity"]}`}</p>
   //   ));
   // }
+  let options = [100, 200, 400, 500, 800, 2000];
   return (
     <>
+      {/* {`gamma: ${gamma}`} */}
       gamma:
       <select
         value={gamma}
@@ -115,15 +90,11 @@ export const GammaSelection = () => {
           setGamma(e.target.value);
         }}
       >
-        {options[`options`] ? (
-          options[`options`].map((option, key) => (
-            <option key={key} value={option}>
-              {option}
-            </option>
-          ))
-        ) : (
-          <>loading...</>
-        )}
+        {options.map((option, i) => (
+          <option key={i} value={option}>
+            {option}
+          </option>
+        ))}
       </select>
       <br />
       <label htmlFor="ploidy">ploidy: </label>
@@ -132,10 +103,20 @@ export const GammaSelection = () => {
       <label htmlFor="cellularity">cellularity:</label>
       <input type="text" name="cellularity" id="" />
       <br />
+      <label htmlFor="sd.BAF">sd.BAF: </label>
+      <input type="text" name="sd.BAF" id="" />
       <br />
       <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      {/* <select name="select" id="">
+        <option value="300">300</option>
+        <option value="400">400</option>
+        <option value="500">500</option>
+      </select> */}
       {images && renderImages}
-      {/* {!loading && data && renderImages} */}
     </>
   );
 };

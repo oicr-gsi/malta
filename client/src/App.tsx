@@ -4,8 +4,6 @@ import { GammaSelection } from "./gammaSelection";
 function App() {
   return (
     <>
-      <>hi</>
-      <br />
       <GammaSelection />
     </>
   );

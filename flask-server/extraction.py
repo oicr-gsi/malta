@@ -3,6 +3,7 @@ import os
 from zipfile import ZipFile, is_zipfile
 from PyPDF2 import PdfFileReader
 from dotenv import load_dotenv
+import re
 # -----------------------------------------------------------------------------------
 # Unzip sample data 
 
@@ -17,15 +18,29 @@ from dotenv import load_dotenv
 
 # -----------------------------------------------------------------------------------
 
-# Extract text data from gamma folders
+
 def get_data_folders():
     load_dotenv()
     return ([(f.name) for f in os.scandir(os.getenv("MALTA_DATA_FOLDER")) if is_zipfile(f)] )
 
 
 def get_gamma_options(path):
-    gamma_options = sorted([int(f.name) for f in os.scandir(path) if f.is_dir()])
-    return gamma_options
+    with ZipFile(path, 'r') as f:
+        folders = [info.filename for info in f.infolist() if info.is_dir()]
+
+    filtered = []
+    for folder in folders:
+        match = re.findall("\d{2,4}", folder)
+        filtered.append(match)
+
+    gamma_options = set()
+    for i in range(len(folders)):
+        if filtered[i] != []:
+            option = int(filtered[i][0])
+            gamma_options.add(option)
+
+    return sorted(gamma_options)
+
 
 
 def set_path(gamma):
@@ -62,6 +77,7 @@ def jsonify_extracted_text(path, text, data_unique_key):
     
     return json
 
+
 def extract(path, data_unique_key):
     """
     Extracts text data from PDF and stores it in a dictionary for a given gamma
@@ -97,6 +113,7 @@ def extract(path, data_unique_key):
         pass
     
     return data
+
 
 def get_alternate_solutions(gamma, base_path):
     """

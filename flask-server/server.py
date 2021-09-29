@@ -9,16 +9,17 @@ SOLUTION_FILENAME = str(os.getenv("SOLUTION_FILENAME"))
 @app.route("/gamma_options")
 def gamma_options():
     # this function will need to take a file path argument later on
-    path = os.getenv("PATH_TO_DATA")
-    return {"options": get_gamma_options(path)}
+    DATA_PATH = os.path.join(os.getenv("MALTA_DATA_FOLDER"), str(os.getenv("TEST_DATA")))
+    return {"options": get_gamma_options(DATA_PATH)}
 
 @app.route("/data/<int:gamma>", methods=['POST'])
 def data(gamma):
     if request.method == 'POST':
         print("gamma from front end", gamma)
-        BASE_FILEPATH = set_path(gamma)
+        DATA_PATH = os.path.join(os.getenv("MALTA_DATA_FOLDER"), str(os.getenv("TEST_DATA")))
+        BASE_PATH = os.path.join(DATA_PATH, "gammas")
         data = []
-        data = get_gamma_data(BASE_FILEPATH, SOLUTION_FILENAME)
+        data = get_gamma_data(gamma, BASE_PATH)
         return {gamma: data}
 
 @app.route("/pdf", methods=['POST'])

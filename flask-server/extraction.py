@@ -1,6 +1,6 @@
 # Author: Vivek Alamuri - Bioinformatics Programmer, OICR, Sept. 2021
 import os
-from zipfile import ZipFile
+from zipfile import ZipFile, is_zipfile
 from PyPDF2 import PdfFileReader
 from dotenv import load_dotenv
 # -----------------------------------------------------------------------------------
@@ -18,6 +18,11 @@ from dotenv import load_dotenv
 # -----------------------------------------------------------------------------------
 
 # Extract text data from gamma folders
+def get_data_folders():
+    load_dotenv()
+    return ([(f.name) for f in os.scandir(os.getenv("MALTA_DATA_FOLDER")) if is_zipfile(f)] )
+
+
 def get_gamma_options(path):
     gamma_options = sorted([int(f.name) for f in os.scandir(path) if f.is_dir()])
     return gamma_options
@@ -25,7 +30,7 @@ def get_gamma_options(path):
 
 def set_path(gamma):
     load_dotenv()
-    return os.path.join(str(os.getenv("PATH_TO_DATA")), f"{gamma}")
+    return f"gammas/{gamma}/"
 
 
 def jsonify_extracted_text(path, text, data_unique_key):
@@ -68,8 +73,17 @@ def extract(path, data_unique_key):
     Returns:
         data: Dictionary, extracted data from one PDF file
     """
+    
+    with ZipFile(os.path.join(str(os.getenv("MALTA_DATA_FOLDER")), os.getenv("TEST_DATA")), 'r') as f:
+        # path = "gammas/200/sol3_0.44/"
+        file_path = path + str(os.getenv("SOLUTION_FILENAME"))
+        f.extract(file_path, str(os.getenv("MALTA_DATA_FOLDER")))
+    
+    
+    extracted_path = os.path.join(str(os.getenv("MALTA_DATA_FOLDER")), file_path)
+    pdf = PdfFileReader(extracted_path)
+
     data = {}
-    pdf = PdfFileReader(path)
 
         # model_fit files have one page only, hence getPage(0) 
     pageObj = pdf.getPage(0)
@@ -77,14 +91,14 @@ def extract(path, data_unique_key):
         # extracted text
         txt = pageObj.extractText()
         # adding json format extracted data to dictionary
-        data = jsonify_extracted_text(path, txt, data_unique_key)
+        data = jsonify_extracted_text(extracted_path, txt, data_unique_key)
 
     except:
         pass
     
     return data
 
-def get_alternate_solutions(base_path, solution_filename):
+def get_alternate_solutions(gamma, base_path):
     """
     Extracts text data from all alternate solutions folder for a given gamma
 
@@ -100,18 +114,20 @@ def get_alternate_solutions(base_path, solution_filename):
     """
     
     # List of subfolders (alternate solutions) in current directory
-    alternate_solution_folders = [f.path for f in os.scandir(base_path) if f.is_dir()]
+    with ZipFile(os.path.join(str(os.getenv("MALTA_DATA_FOLDER")), os.getenv("TEST_DATA")), 'r') as f:
+        subfolders = [item.filename for item in f.infolist() if item.is_dir()]
+
+    alternate_solution_folders = [folder_name for folder_name in subfolders if "sol" in folder_name and f"{gamma}/" in folder_name]
 
     alternate_solutions_data = []
     # extracting text data from every model_fit file that is in a solution subfolder
     for idx, alt_solution in enumerate(alternate_solution_folders):
-        alt_solution_path = os.path.join(alt_solution, solution_filename)
-        alternate_solutions_data.append(extract(alt_solution_path, data_unique_key=idx))
+        alternate_solutions_data.append(extract(alt_solution, data_unique_key=idx))
     
     return alternate_solutions_data
 
 
-def get_gamma_data(base_path, solution_filename):
+def get_gamma_data(gamma, base_path):
     """
     Extracts all text data for a given gamma
 
@@ -127,10 +143,10 @@ def get_gamma_data(base_path, solution_filename):
     """
     data = []
 
-    ideal_solution_filepath = os.path.join(base_path, solution_filename)
-    ideal_solution_data = extract(ideal_solution_filepath, -1)
+    ideal_solution_data = extract(set_path(gamma), -1)
     data.append(ideal_solution_data)
-    alternate_solution_data = get_alternate_solutions(base_path, solution_filename)
+    
+    alternate_solution_data = get_alternate_solutions(gamma, base_path)
     
     for alt_sol in alternate_solution_data:
         data.append(alt_sol)
@@ -139,8 +155,9 @@ def get_gamma_data(base_path, solution_filename):
 
 
 # #testing code
-load_dotenv()
-BASE_FILEPATH = set_path(200)
-my_data = get_gamma_data(BASE_FILEPATH, str(os.getenv("SOLUTION_FILENAME")))
+# load_dotenv()
+# BASE_FILEPATH = os.path.join(os.getenv("MALTA_DATA_FOLDER"), str(os.getenv("TEST_DATA")))
+# BASE_FILEPATH = os.path.join(BASE_FILEPATH, "gammas")
 
-print(my_data)
+# my_data = get_gamma_data(200, BASE_FILEPATH)
+# print(my_data)

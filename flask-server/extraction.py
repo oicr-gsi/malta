@@ -134,7 +134,7 @@ def get_alternate_solutions(gamma, base_path):
     with ZipFile(os.path.join(str(os.getenv("MALTA_DATA_FOLDER")), os.getenv("TEST_DATA")), 'r') as f:
         subfolders = [item.filename for item in f.infolist() if item.is_dir()]
 
-    alternate_solution_folders = [folder_name for folder_name in subfolders if "sol" in folder_name and f"{gamma}/" in folder_name]
+    alternate_solution_folders = [folder_name for folder_name in subfolders if "sol" in folder_name and f"/{gamma}/" in folder_name]
 
     alternate_solutions_data = []
     # extracting text data from every model_fit file that is in a solution subfolder
@@ -176,5 +176,5 @@ def get_gamma_data(gamma, base_path):
 # BASE_FILEPATH = os.path.join(os.getenv("MALTA_DATA_FOLDER"), str(os.getenv("TEST_DATA")))
 # BASE_FILEPATH = os.path.join(BASE_FILEPATH, "gammas")
 
-# my_data = get_gamma_data(200, BASE_FILEPATH)
+# my_data = get_gamma_data(500, BASE_FILEPATH)
 # print(my_data)

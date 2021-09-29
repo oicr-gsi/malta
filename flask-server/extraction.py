@@ -25,7 +25,7 @@ def get_gamma_options(path):
 
 def set_path(gamma):
     load_dotenv()
-    return (str(os.getenv("PATH_TO_DATA")) + f'//{gamma}/')
+    return os.path.join(str(os.getenv("PATH_TO_DATA")), f"{gamma}")
 
 
 def jsonify_extracted_text(path, text, data_unique_key):
@@ -105,7 +105,7 @@ def get_alternate_solutions(base_path, solution_filename):
     alternate_solutions_data = []
     # extracting text data from every model_fit file that is in a solution subfolder
     for idx, alt_solution in enumerate(alternate_solution_folders):
-        alt_solution_path = alt_solution + '/' + solution_filename
+        alt_solution_path = os.path.join(alt_solution, solution_filename)
         alternate_solutions_data.append(extract(alt_solution_path, data_unique_key=idx))
     
     return alternate_solutions_data
@@ -127,7 +127,7 @@ def get_gamma_data(base_path, solution_filename):
     """
     data = []
 
-    ideal_solution_filepath = base_path + solution_filename
+    ideal_solution_filepath = os.path.join(base_path, solution_filename)
     ideal_solution_data = extract(ideal_solution_filepath, -1)
     data.append(ideal_solution_data)
     alternate_solution_data = get_alternate_solutions(base_path, solution_filename)
@@ -139,8 +139,8 @@ def get_gamma_data(base_path, solution_filename):
 
 
 # #testing code
-# load_dotenv()
-# BASE_FILEPATH = set_path(800)
-# my_data = get_gamma_data(BASE_FILEPATH, str(os.getenv("SOLUTION_FILENAME")))
+load_dotenv()
+BASE_FILEPATH = set_path(200)
+my_data = get_gamma_data(BASE_FILEPATH, str(os.getenv("SOLUTION_FILENAME")))
 
-# print(my_data)
+print(my_data)

@@ -24,33 +24,57 @@ interface SolutionData {
 }
 
 export const GammaSelection = () => {
-  const [data, setData] = useState<Data>();
-  const [PDF, setPDF] = useState<String>();
-  const [gamma, setGamma] = useState<any>(100);
   const [loading, setLoading] = useState<Boolean>(false);
   const [error, setError] = useState<Boolean>();
+
+  const [data, setData] = useState<Data>();
+  const [PDF, setPDF] = useState<String>();
+  const [gamma, setGamma] = useState<any>();
   const [images, setImages] = useState<any>();
+
   const [options, setOptions] = useState([]);
-  const [selectedPlot, setSelectedPlot] = useState(0);
+  // const [selectedPlot, setSelectedPlot] = useState(0);
+
+  const [folders, setFolders] = useState<any>([]);
+  const [selectedFolder, setSelectedFolder] = useState<any>();
 
   useEffect(() => {
-    getData();
+    if (gamma !== undefined) {
+      getData();
+    }
   }, [gamma]);
+
+  // useEffect(() => {
+  //   setLoading(true);
+  //   fetch("/gamma_options")
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       setOptions(res);
+  //       console.log(options);
+  //     })
+  //     .finally(() => setLoading(false));
+  // }, []);
 
   useEffect(() => {
     setLoading(true);
-    fetch("/gamma_options")
+    fetch("/data_folders")
       .then((res) => res.json())
       .then((res) => {
-        setOptions(res);
+        setFolders(res);
         console.log(options);
       })
       .finally(() => setLoading(false));
   }, []);
 
-  // useEffect(() => {
-  //   console.log(gamma);
-  // }, [gamma]);
+  useEffect(() => {
+    if (selectedFolder) {
+      fetch(`/selected_folder/${selectedFolder}`, {
+        method: "POST",
+      })
+        .then((res) => res.json())
+        .then((res) => setOptions(res));
+    }
+  }, [selectedFolder]);
 
   const getData = () => {
     let pdfs = [];
@@ -95,10 +119,10 @@ export const GammaSelection = () => {
     renderImages = images.map((image, i) => (
       <span
         style={{ padding: "2vw" }}
-        onClick={() => {
-          setSelectedPlot(i);
-          console.log(selectedPlot);
-        }}
+        // onClick={() => {
+        //   setSelectedPlot(i);
+        //   console.log(selectedPlot);
+        // }}
       >
         <embed
           // #toolbar=0 is needed to remove built-in pdf viewer and make it look like an image
@@ -124,20 +148,9 @@ export const GammaSelection = () => {
   //     />
   //   ));
   // }
-  const files = ["file1", "file2"];
 
   return (
     <>
-      {/* choose file
-      <select name="choose file" id="">
-        {files.map((file, key) => (
-          <option key={key} value={file}>
-            {file}
-          </option>
-        ))}
-      </select>
-      <br /> */}
-
       <Container style={{ paddingTop: "2vh" }}>
         <p>
           Select a gamma value to get started. Choose a solution by clicking on
@@ -145,6 +158,30 @@ export const GammaSelection = () => {
           {/* gamma represents how much DNA was chopped; each plot is a local max/min; djerba will query DB; dont worry too much about clicking on an image*/}
         </p>
         <Row>
+          <Col style={{ textAlign: "center" }}>
+            <DropdownLabel>Select Folder</DropdownLabel>
+            <br />
+            <Dropdown
+              value={selectedFolder}
+              onChange={(e) => {
+                setSelectedFolder(e.target.value);
+              }}
+            >
+              <option key="default" style={{ display: "none" }}></option>
+              {folders[`data`] ? (
+                folders[`data`].map((option, key) => (
+                  <>
+                    <DropdownOption key={key} value={option}>
+                      {option}
+                    </DropdownOption>
+                  </>
+                ))
+              ) : (
+                <>Loading...</>
+              )}
+            </Dropdown>
+          </Col>
+
           <Col style={{ textAlign: "center" }}>
             <DropdownLabel>Gamma</DropdownLabel>
             <br />
@@ -154,20 +191,21 @@ export const GammaSelection = () => {
                 setGamma(e.target.value);
               }}
             >
+              <option style={{ display: "none" }}></option>
               {options[`options`] ? (
                 options[`options`].map((option, key) => (
                   <>
                     <DropdownOption key={key} value={option}>
                       {option}
                     </DropdownOption>
-                    {/* <hr style={{ color: "blue" }} /> */}
                   </>
                 ))
               ) : (
-                <>loading...</>
+                <>Loading...</>
               )}
             </Dropdown>
           </Col>
+
           <Col>
             <FormInputLabel>Cellularity</FormInputLabel>
             <Textbox type="text" name="cellularity" />

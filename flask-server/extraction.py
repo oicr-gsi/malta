@@ -42,9 +42,7 @@ def get_gamma_options(path):
     return sorted(gamma_options)
 
 
-
 def set_path(gamma):
-    load_dotenv()
     return f"gammas/{gamma}/"
 
 
@@ -78,7 +76,7 @@ def jsonify_extracted_text(path, text, data_unique_key):
     return json
 
 
-def extract(path, data_unique_key):
+def extract(path, data_unique_key, selected_folder, solution_filename):
     """
     Extracts text data from PDF and stores it in a dictionary for a given gamma
 
@@ -90,9 +88,9 @@ def extract(path, data_unique_key):
         data: Dictionary, extracted data from one PDF file
     """
     
-    with ZipFile(os.path.join(str(os.getenv("MALTA_DATA_FOLDER")), os.getenv("TEST_DATA")), 'r') as f:
+    with ZipFile(os.path.join(str(os.getenv("MALTA_DATA_FOLDER")), selected_folder), 'r') as f:
         # path = "gammas/200/sol3_0.44/"
-        file_path = path + str(os.getenv("SOLUTION_FILENAME"))
+        file_path = path + solution_filename
         f.extract(file_path, str(os.getenv("MALTA_DATA_FOLDER")))
     
     
@@ -115,7 +113,7 @@ def extract(path, data_unique_key):
     return data
 
 
-def get_alternate_solutions(gamma, base_path):
+def get_alternate_solutions(gamma, selected_folder, solution_filename):
     """
     Extracts text data from all alternate solutions folder for a given gamma
 
@@ -131,7 +129,7 @@ def get_alternate_solutions(gamma, base_path):
     """
     
     # List of subfolders (alternate solutions) in current directory
-    with ZipFile(os.path.join(str(os.getenv("MALTA_DATA_FOLDER")), os.getenv("TEST_DATA")), 'r') as f:
+    with ZipFile(os.path.join(str(os.getenv("MALTA_DATA_FOLDER")), selected_folder), 'r') as f:
         subfolders = [item.filename for item in f.infolist() if item.is_dir()]
 
     alternate_solution_folders = [folder_name for folder_name in subfolders if "sol" in folder_name and f"/{gamma}/" in folder_name]
@@ -139,12 +137,12 @@ def get_alternate_solutions(gamma, base_path):
     alternate_solutions_data = []
     # extracting text data from every model_fit file that is in a solution subfolder
     for idx, alt_solution in enumerate(alternate_solution_folders):
-        alternate_solutions_data.append(extract(alt_solution, data_unique_key=idx))
+        alternate_solutions_data.append(extract(alt_solution, idx, selected_folder, solution_filename))
     
     return alternate_solutions_data
 
 
-def get_gamma_data(gamma, base_path):
+def get_gamma_data(gamma, selected_folder, solution_filename):
     """
     Extracts all text data for a given gamma
 
@@ -160,15 +158,26 @@ def get_gamma_data(gamma, base_path):
     """
     data = []
 
-    ideal_solution_data = extract(set_path(gamma), -1)
+    ideal_solution_data = extract(set_path(gamma), -1, selected_folder, solution_filename)
     data.append(ideal_solution_data)
     
-    alternate_solution_data = get_alternate_solutions(gamma, base_path)
+    alternate_solution_data = get_alternate_solutions(gamma, selected_folder, solution_filename)
     
     for alt_sol in alternate_solution_data:
         data.append(alt_sol)
 
     return data
+
+def get_solution_name(selected_folder):
+    with ZipFile(os.path.join(str(os.getenv("MALTA_DATA_FOLDER")), selected_folder), 'r') as f:
+        names = f.namelist()
+
+    paths = [name for name in names if "_model_fit.pdf" in name]
+    pdf_files = [path.split("/")[-1] for path in paths]
+
+    # casting to a set to ensure that there is only one unique model_fit filename
+    # casting the set to a list to easily access the desired string
+    return list(set(pdf_files))[0]
 
 
 # #testing code
@@ -176,5 +185,5 @@ def get_gamma_data(gamma, base_path):
 # BASE_FILEPATH = os.path.join(os.getenv("MALTA_DATA_FOLDER"), str(os.getenv("TEST_DATA")))
 # BASE_FILEPATH = os.path.join(BASE_FILEPATH, "gammas")
 
-# my_data = get_gamma_data(500, BASE_FILEPATH)
+# my_data = get_gamma_data(100, str(os.getenv("TEST_DATA")), get_solution_name(str(os.getenv("TEST_DATA"))) )
 # print(my_data)

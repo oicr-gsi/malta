@@ -4,20 +4,6 @@ from zipfile import ZipFile, is_zipfile
 from PyPDF2 import PdfFileReader
 from dotenv import load_dotenv
 import re
-# -----------------------------------------------------------------------------------
-# Unzip sample data 
-
-# with ZipFile('PANX_1277_Lv_M_100-JHU-003_LCM3.results.zip', 'r') as f:
-#     f.extractall('PANX_1277_gammas')
-
-# with ZipFile('PANX_1280_Lv_M_100-PM-022_LCM2.results.zip', 'r') as f:
-#     f.extractall('PANX_1280_gammas')
-
-# with ZipFile('PANX_1288_Pm_M_100_JHU_004_LCM3_6.results.zip', 'r') as f:
-#     f.extractall('PANX_1288_gammas')
-
-# -----------------------------------------------------------------------------------
-
 
 def get_data_folders():
     load_dotenv()
@@ -44,6 +30,18 @@ def get_gamma_options(path):
 
 def set_path(gamma):
     return f"gammas/{gamma}/"
+
+
+def get_solution_name(selected_folder):
+    with ZipFile(os.path.join(str(os.getenv("MALTA_DATA_FOLDER")), selected_folder), 'r') as f:
+        names = f.namelist()
+
+    paths = [name for name in names if "_model_fit.pdf" in name]
+    pdf_files = [path.split("/")[-1] for path in paths]
+
+    # casting to a set to ensure that there is only one unique model_fit filename
+    # casting the set to a list to easily access the desired string
+    return list(set(pdf_files))[0]
 
 
 def jsonify_extracted_text(path, text, data_unique_key):
@@ -168,22 +166,13 @@ def get_gamma_data(gamma, selected_folder, solution_filename):
 
     return data
 
-def get_solution_name(selected_folder):
-    with ZipFile(os.path.join(str(os.getenv("MALTA_DATA_FOLDER")), selected_folder), 'r') as f:
-        names = f.namelist()
 
-    paths = [name for name in names if "_model_fit.pdf" in name]
-    pdf_files = [path.split("/")[-1] for path in paths]
-
-    # casting to a set to ensure that there is only one unique model_fit filename
-    # casting the set to a list to easily access the desired string
-    return list(set(pdf_files))[0]
 
 
 # #testing code
-# load_dotenv()
 # BASE_FILEPATH = os.path.join(os.getenv("MALTA_DATA_FOLDER"), str(os.getenv("TEST_DATA")))
 # BASE_FILEPATH = os.path.join(BASE_FILEPATH, "gammas")
 
+# load_dotenv()
 # my_data = get_gamma_data(100, str(os.getenv("TEST_DATA")), get_solution_name(str(os.getenv("TEST_DATA"))) )
 # print(my_data)

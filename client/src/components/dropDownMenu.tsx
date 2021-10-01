@@ -21,11 +21,9 @@ export const DropdownMenu = (props) => {
         <option style={{ display: "none" }}></option>
         {data["data"] ? (
           data["data"].map((option, key) => (
-            <>
-              <DropdownOption key={key} value={option}>
-                {option}
-              </DropdownOption>
-            </>
+            <DropdownOption key={key} value={option}>
+              {option}
+            </DropdownOption>
           ))
         ) : (
           <></>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { GammaSelection } from "./components/gammaSelection";
 import { Container } from "react-bootstrap";
 import { Theme } from "./globalStyles";
+
 function App() {
   const { gray } = Theme;
   return (

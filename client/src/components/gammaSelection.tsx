@@ -22,16 +22,17 @@ export const GammaSelection = () => {
   const [loading, setLoading] = useState<Boolean>(false);
   const [error, setError] = useState<Boolean>();
 
+  const [options, setOptions] = useState<Number[]>([]);
+  const [folders, setFolders] = useState<String[]>([]);
+
   const [data, setData] = useState<Data>();
   const [PDF, setPDF] = useState<String>();
-  const [gamma, setGamma] = useState<any>();
-  const [images, setImages] = useState<any>();
+  const [images, setImages] = useState<String[]>([]);
 
-  const [options, setOptions] = useState([]);
-  // const [selectedPlot, setSelectedPlot] = useState(0);
-
-  const [folders, setFolders] = useState<any>([]);
   const [selectedFolder, setSelectedFolder] = useState<any>();
+  const [gamma, setGamma] = useState<Number>();
+  const [cellularity, setCellularity] = useState<String>();
+  const [ploidy, setPloidy] = useState<String>();
 
   useEffect(() => {
     // if statement needed to prevent fetching on page load when gamma is not selected
@@ -89,7 +90,6 @@ export const GammaSelection = () => {
         }
         setImages(pdfs);
         setData(gamma_data);
-        console.log(data);
       })
 
       .catch((err) => {
@@ -134,14 +134,33 @@ export const GammaSelection = () => {
         <Row>
           <Col>
             <FormInputLabel>Cellularity</FormInputLabel>
-            <Textbox type="text" name="cellularity" />
+            <Textbox
+              type="text"
+              name="cellularity"
+              onChange={(e) => setCellularity(e.target.value)}
+            />
           </Col>
           <Col>
             <FormInputLabel>Ploidy</FormInputLabel>
-            <Textbox type="text" name="ploidy" />
+            <Textbox
+              type="text"
+              name="ploidy"
+              onChange={(e) => setPloidy(e.target.value)}
+            />
           </Col>
           <Col style={{ position: "relative" }}>
-            <SubmitButton>Submit</SubmitButton>
+            <SubmitButton
+              onClick={() =>
+                console.log({
+                  selectedFolder,
+                  gamma,
+                  cellularity,
+                  ploidy,
+                })
+              }
+            >
+              Submit
+            </SubmitButton>
           </Col>
           {/* these three columns make row spacing even and compact*/}
           <Col></Col>

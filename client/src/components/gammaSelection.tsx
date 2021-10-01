@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button, Spinner } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { SubmitButton, Textbox, FormInputLabel } from "./gammaSelectionStyles";
-import { DropdownMenu } from "./components/dropDownMenu";
-import { ImageGrid } from "./components/imageGrid";
+import { DropdownMenu } from "./dropDownMenu";
+import { ImageGrid } from "./imageGrid";
 
 interface Data {
   gamma: SolutionData[];

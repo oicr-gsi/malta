@@ -3,7 +3,7 @@ import {
   DropdownLabel,
   DropdownOption,
   DropdownSelect,
-} from "../gammaSelectionStyles";
+} from "./gammaSelectionStyles";
 
 export const DropdownMenu = (props) => {
   const { data, label, value, setValue } = props;

@@ -1,6 +1,6 @@
 import { Button, Col, Spinner } from "react-bootstrap";
 import styled from "styled-components";
-import { Theme } from "./globalStyles";
+import { Theme } from "../globalStyles";
 
 const { lightGreen, darkGreen, white, black, gray } = Theme;
 const fontSize = "18px";

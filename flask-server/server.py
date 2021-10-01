@@ -1,11 +1,9 @@
-from flask import Flask, send_file, request
+from flask import Flask, send_file, request, session
 from extraction import get_gamma_data, get_data_folders, get_gamma_options, get_solution_name
 import os
 
 app = Flask(__name__)
-
-
-SELECTED_DATA_FOLDER = ""
+app.secret_key = os.getenv("SECRET_KEY")
 
 @app.route("/data_folders")
 def data_options():
@@ -15,23 +13,24 @@ def data_options():
 def selected_folder(folder_name):
     if request.method == "POST":
         print("\nselected folder:", folder_name, "\n")
-        SELECTED_DATA_FOLDER = folder_name
-        return gamma_options(SELECTED_DATA_FOLDER)
+        session["selected_data_folder"] = folder_name
+        return gamma_options(folder_name)
 
 
 def gamma_options(folder_name):
     data_path = os.path.join(os.getenv("MALTA_DATA_FOLDER"), folder_name)
+    print(data_path)
     return {"options": get_gamma_options(data_path)}
+
 
 @app.route("/data/<int:gamma>", methods=["POST"])
 def data(gamma):
     if request.method == "POST":
         print("gamma from front end", gamma)
-        # DATA_PATH = os.path.join(os.getenv("MALTA_DATA_FOLDER"), SELECTED_DATA_FOLDER)
-        # BASE_PATH = os.path.join(DATA_PATH, "gammas")
-        solution_filename = get_solution_name(SELECTED_DATA_FOLDER)
-        data = get_gamma_data(gamma, str(os.getenv("TEST_DATA")), get_solution_name(str(os.getenv("TEST_DATA"))) )
+        solution_filename = get_solution_name(session["selected_data_folder"])
+        data = get_gamma_data(gamma, session["selected_data_folder"], get_solution_name(session["selected_data_folder"]))
         return {gamma: data}
+
 
 @app.route("/pdf", methods=["POST"])
 def send_pdf():
@@ -43,5 +42,3 @@ def send_pdf():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-# PANX_1288_Pm_M_100_JHU_004_LCM3_6.results.zip

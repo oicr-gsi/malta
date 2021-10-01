@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Button, Spinner } from "react-bootstrap";
+import { Container, Row, Col, Spinner } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { SubmitButton, Textbox, FormInputLabel } from "./gammaSelectionStyles";
 import { DropdownMenu } from "./dropDownMenu";
@@ -100,6 +100,18 @@ export const GammaSelection = () => {
       });
   };
 
+  const handleFormSubmit = () => {
+    let gamma_submit = Number(gamma);
+    let cellularity_submit = Number(cellularity);
+    let ploidy_submit = Number(ploidy);
+    console.log({
+      selectedFolder,
+      gamma_submit,
+      cellularity_submit,
+      ploidy_submit,
+    });
+  };
+
   return (
     <>
       <Container style={{ paddingTop: "2vh" }}>
@@ -149,18 +161,7 @@ export const GammaSelection = () => {
             />
           </Col>
           <Col style={{ position: "relative" }}>
-            <SubmitButton
-              onClick={() =>
-                console.log({
-                  selectedFolder,
-                  gamma,
-                  cellularity,
-                  ploidy,
-                })
-              }
-            >
-              Submit
-            </SubmitButton>
+            <SubmitButton onClick={handleFormSubmit}>Submit</SubmitButton>
           </Col>
           {/* these three columns make row spacing even and compact*/}
           <Col></Col>

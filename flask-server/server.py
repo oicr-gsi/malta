@@ -20,7 +20,7 @@ def selected_folder(folder_name):
 def gamma_options(folder_name):
     data_path = os.path.join(os.getenv("MALTA_DATA_FOLDER"), folder_name)
     print(data_path)
-    return {"options": get_gamma_options(data_path)}
+    return {"data": get_gamma_options(data_path)}
 
 
 @app.route("/data/<int:gamma>", methods=["POST"])

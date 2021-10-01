@@ -1,4 +1,4 @@
-import { Button } from "react-bootstrap";
+import { Button, Col, Spinner } from "react-bootstrap";
 import styled from "styled-components";
 import { Theme } from "./globalStyles";
 
@@ -12,6 +12,12 @@ export const Textbox = styled.input`
   color: ${white};
   border: none;
   opacity: 0.7;
+  width: 12.9rem;
+`;
+
+// to make boxes more compact
+export const FormItemCol = styled(Col)`
+  padding-right: 1rem;
 `;
 
 export const SubmitButton = styled(Button)`
@@ -25,6 +31,7 @@ export const SubmitButton = styled(Button)`
   position: absolute;
   text-align: center;
   top: 35%;
+  margin-left: 1.5rem;
 
   &:hover {
     background-color: ${lightGreen};
@@ -41,12 +48,13 @@ export const DropdownLabel = styled(FormInputLabel)`
   text-align: center;
 `;
 
-export const Dropdown = styled.select`
-  background-color: ${darkGreen};
+export const DropdownSelect = styled.select`
+  background-color: ${lightGreen};
   color: ${white};
   opacity: 0.7;
   font-size: ${fontSize};
   font-weight: 400;
+  margin-bottom: 0.5rem;
 `;
 
 export const DropdownOption = styled.option`

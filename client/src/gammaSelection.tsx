@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button, Spinner } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import {
-  SubmitButton,
-  Textbox,
-  FormInputLabel,
-  DropdownLabel,
-  Dropdown,
-  DropdownOption,
-} from "./gammaSelectionStyles";
+import { SubmitButton, Textbox, FormInputLabel } from "./gammaSelectionStyles";
+import { DropdownMenu } from "./components/dropDownMenu";
+import { ImageGrid } from "./components/imageGrid";
 
 interface Data {
   gamma: SolutionData[];
@@ -39,21 +34,11 @@ export const GammaSelection = () => {
   const [selectedFolder, setSelectedFolder] = useState<any>();
 
   useEffect(() => {
+    // if statement needed to prevent fetching on page load when gamma is not selected
     if (gamma !== undefined) {
       getData();
     }
   }, [gamma]);
-
-  // useEffect(() => {
-  //   setLoading(true);
-  //   fetch("/gamma_options")
-  //     .then((res) => res.json())
-  //     .then((res) => {
-  //       setOptions(res);
-  //       console.log(options);
-  //     })
-  //     .finally(() => setLoading(false));
-  // }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -67,6 +52,7 @@ export const GammaSelection = () => {
   }, []);
 
   useEffect(() => {
+    // if statement needed to prevent fetching on page load when folder is not selected
     if (selectedFolder) {
       fetch(`/selected_folder/${selectedFolder}`, {
         method: "POST",
@@ -114,98 +100,38 @@ export const GammaSelection = () => {
       });
   };
 
-  let renderImages;
-  if (images) {
-    renderImages = images.map((image, i) => (
-      <span
-        style={{ padding: "2vw" }}
-        // onClick={() => {
-        //   setSelectedPlot(i);
-        //   console.log(selectedPlot);
-        // }}
-      >
-        <embed
-          // #toolbar=0 is needed to remove built-in pdf viewer and make it look like an image
-          src={image + "#toolbar=0"}
-          width="500"
-          height="500"
-          type="application/pdf"
-          key={i}
-        />
-      </span>
-    ));
-  }
-
-  // if (data) {
-  //   renderImages = data[`${gamma}`].map((solution, i) => (
-  //     <embed
-  //       // #toolbar=0 is needed to remove built-in pdf viewer and make it look like an image
-  //       src={solution["path"] + "#toolbar=0"}
-  //       width="350"
-  //       height="350"
-  //       type="application/pdf"
-  //       key={i}
-  //     />
-  //   ));
-  // }
-
   return (
     <>
       <Container style={{ paddingTop: "2vh" }}>
         <p>
           Select a gamma value to get started. Choose a solution by clicking on
-          a plot.
-          {/* gamma represents how much DNA was chopped; each plot is a local max/min; djerba will query DB; dont worry too much about clicking on an image*/}
+          a plot. The first plot is the ideal solution.
         </p>
+      </Container>
+      <Container style={{ paddingRight: "3vw", paddingLeft: "3vw" }}>
         <Row>
-          <Col style={{ textAlign: "center" }}>
-            <DropdownLabel>Select Folder</DropdownLabel>
-            <br />
-            <Dropdown
+          <Col>
+            <DropdownMenu
+              label="Select Folder"
               value={selectedFolder}
-              onChange={(e) => {
-                setSelectedFolder(e.target.value);
-              }}
-            >
-              <option key="default" style={{ display: "none" }}></option>
-              {folders[`data`] ? (
-                folders[`data`].map((option, key) => (
-                  <>
-                    <DropdownOption key={key} value={option}>
-                      {option}
-                    </DropdownOption>
-                  </>
-                ))
-              ) : (
-                <>Loading...</>
-              )}
-            </Dropdown>
+              setValue={setSelectedFolder}
+              data={folders}
+            />
           </Col>
 
-          <Col style={{ textAlign: "center" }}>
-            <DropdownLabel>Gamma</DropdownLabel>
-            <br />
-            <Dropdown
-              value={gamma}
-              onChange={(e) => {
-                setGamma(e.target.value);
-              }}
-            >
-              <option style={{ display: "none" }}></option>
-              {options[`options`] ? (
-                options[`options`].map((option, key) => (
-                  <>
-                    <DropdownOption key={key} value={option}>
-                      {option}
-                    </DropdownOption>
-                  </>
-                ))
-              ) : (
-                <>Loading...</>
-              )}
-            </Dropdown>
-          </Col>
+          {selectedFolder && (
+            <Col>
+              <DropdownMenu
+                label="Gamma"
+                value={gamma}
+                setValue={setGamma}
+                data={options}
+              />
+            </Col>
+          )}
+        </Row>
 
+        <Row>
           <Col>
             <FormInputLabel>Cellularity</FormInputLabel>
             <Textbox type="text" name="cellularity" />
@@ -217,15 +143,21 @@ export const GammaSelection = () => {
           <Col style={{ position: "relative" }}>
             <SubmitButton>Submit</SubmitButton>
           </Col>
+          {/* these three columns make row spacing even and compact*/}
+          <Col></Col>
+          <Col></Col>
+          <Col></Col>
         </Row>
       </Container>
-      <br />
+
       {
         <Container style={{ paddingTop: "5vh" }}>
           {loading ? (
-            <Spinner animation="border" variant="success" />
+            <div style={{ paddingLeft: "2vw" }}>
+              <Spinner animation="border" variant="success" />
+            </div>
           ) : (
-            images && renderImages
+            images && <ImageGrid data={images} />
           )}
         </Container>
       }

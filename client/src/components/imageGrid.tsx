@@ -1,12 +1,12 @@
-import React from "react";
+import React, { Key } from "react";
 
-export const ImageGrid = (props) => {
+export const ImageGrid = (props: { data: String[] }) => {
   const { data } = props;
 
-  const displayImages = (images) => {
+  const displayImages = (images: String[]) => {
     let renderImages;
     if (images) {
-      renderImages = images.map((image, key) => (
+      renderImages = images.map((image: String, key: Key) => (
         <span key={key} style={{ padding: "2vw" }}>
           <embed
             // #toolbar=0 is needed to remove built-in pdf viewer and make it look like an image

@@ -1,11 +1,18 @@
-import React from "react";
+import React, { Key } from "react";
 import {
   DropdownLabel,
   DropdownOption,
   DropdownSelect,
 } from "./gammaSelectionStyles";
 
-export const DropdownMenu = (props) => {
+interface DropdownMenuProps {
+  data: String[] | Number[];
+  label: String;
+  value: String | Number;
+  setValue: any;
+}
+
+export const DropdownMenu = (props: DropdownMenuProps) => {
   const { data, label, value, setValue } = props;
 
   return (
@@ -18,9 +25,10 @@ export const DropdownMenu = (props) => {
           setValue(e.target.value);
         }}
       >
+        {/* this blank option is needed so the dropdown is empty on page load */}
         <option style={{ display: "none" }}></option>
         {data["data"] ? (
-          data["data"].map((option, key) => (
+          data["data"].map((option: String | Number, key: Key) => (
             <DropdownOption key={key} value={option}>
               {option}
             </DropdownOption>

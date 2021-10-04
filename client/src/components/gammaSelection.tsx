@@ -19,39 +19,37 @@ interface SolutionData {
 }
 
 export const GammaSelection = () => {
+  // state variables for async operations
   const [loading, setLoading] = useState<Boolean>(false);
   const [error, setError] = useState<Boolean>();
 
+  // state variables for dropdown menu options
   const [options, setOptions] = useState<Number[]>([]);
   const [folders, setFolders] = useState<String[]>([]);
 
+  // state variables for images display and plot data
   const [data, setData] = useState<Data>();
   const [PDF, setPDF] = useState<String>();
   const [images, setImages] = useState<String[]>([]);
 
+  // state variables for submitting to database
   const [selectedFolder, setSelectedFolder] = useState<any>();
   const [gamma, setGamma] = useState<Number>();
   const [cellularity, setCellularity] = useState<String>();
   const [ploidy, setPloidy] = useState<String>();
 
-  useEffect(() => {
-    // if statement needed to prevent fetching on page load when gamma is not selected
-    if (gamma !== undefined) {
-      getData();
-    }
-  }, [gamma]);
-
+  // fetches available data folders on page load
   useEffect(() => {
     setLoading(true);
     fetch("/data_folders")
       .then((res) => res.json())
       .then((res) => {
         setFolders(res);
-        console.log(options);
       })
       .finally(() => setLoading(false));
   }, []);
 
+  // fetches gamma options for the selected data folder
   useEffect(() => {
     // if statement needed to prevent fetching on page load when folder is not selected
     if (selectedFolder) {
@@ -63,6 +61,15 @@ export const GammaSelection = () => {
     }
   }, [selectedFolder]);
 
+  // fetches plots and data every time gamma changes
+  useEffect(() => {
+    // if statement needed to prevent fetching on page load when gamma is not selected
+    if (gamma !== undefined) {
+      getData();
+    }
+  }, [gamma]);
+
+  // fetches plots and data
   const getData = () => {
     let pdfs = [];
     let gamma_data;
@@ -74,7 +81,7 @@ export const GammaSelection = () => {
       .then((res) => res.json())
       .then((res) => {
         gamma_data = res;
-
+        // iterating over each solution to fetch its plot
         for (let i = 0; i < gamma_data[`${gamma}`].length; i++) {
           fetch("/pdf", {
             method: "POST",
@@ -84,8 +91,8 @@ export const GammaSelection = () => {
             .then((blob) => {
               let objectURL = URL.createObjectURL(blob);
               pdfs.push(objectURL);
+              // this line is needed for images to render on UI
               setPDF(objectURL);
-              gamma_data[`${gamma}`][i]["path"] = objectURL;
             });
         }
         setImages(pdfs);
@@ -100,7 +107,9 @@ export const GammaSelection = () => {
       });
   };
 
+  // submits selected parameters to database
   const handleFormSubmit = () => {
+    // casting form fields, which are Strings, to Number type before submitting
     let gamma_submit = Number(gamma);
     let cellularity_submit = Number(cellularity);
     let ploidy_submit = Number(ploidy);
@@ -170,17 +179,15 @@ export const GammaSelection = () => {
         </Row>
       </Container>
 
-      {
-        <Container style={{ paddingTop: "5vh" }}>
-          {loading ? (
-            <div style={{ paddingLeft: "2vw" }}>
-              <Spinner animation="border" variant="success" />
-            </div>
-          ) : (
-            images && <ImageGrid data={images} />
-          )}
-        </Container>
-      }
+      <Container style={{ paddingTop: "5vh" }}>
+        {loading ? (
+          <div style={{ paddingLeft: "2vw" }}>
+            <Spinner animation="border" variant="success" />
+          </div>
+        ) : (
+          images && <ImageGrid data={images} />
+        )}
+      </Container>
     </>
   );
 };

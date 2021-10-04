@@ -12,23 +12,24 @@ def data_options():
 @app.route("/selected_folder/<string:folder_name>", methods=["POST"])
 def selected_folder(folder_name):
     if request.method == "POST":
-        print("\nselected folder:", folder_name, "\n")
+        # print("\nselected folder:", folder_name, "\n")
         session["selected_data_folder"] = folder_name
         return gamma_options(folder_name)
 
 
 def gamma_options(folder_name):
     data_path = os.path.join(os.getenv("MALTA_DATA_FOLDER"), folder_name)
-    print(data_path)
+    # print(data_path)
     return {"data": get_gamma_options(data_path)}
 
 
 @app.route("/data/<int:gamma>", methods=["POST"])
 def data(gamma):
     if request.method == "POST":
-        print("gamma from front end", gamma)
+        # print("gamma from front end", gamma)
+        selected_folder = session["selected_data_folder"]
         solution_filename = get_solution_name(session["selected_data_folder"])
-        data = get_gamma_data(gamma, session["selected_data_folder"], get_solution_name(session["selected_data_folder"]))
+        data = get_gamma_data(gamma, selected_folder, solution_filename)
         return {gamma: data}
 
 
@@ -36,7 +37,7 @@ def data(gamma):
 def send_pdf():
     if request.method == "POST":
         path = request.get_json(force=True)
-        print(path)
+        # print(path)
         return send_file(path)  
     else: pass
 

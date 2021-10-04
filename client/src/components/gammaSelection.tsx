@@ -91,6 +91,8 @@ export const GammaSelection = () => {
             .then((blob) => {
               let objectURL = URL.createObjectURL(blob);
               pdfs.push(objectURL);
+              // rewriting OS path to PDF to the blob URL
+              gamma_data[`${gamma}`][i]["path"] = objectURL;
               // this line is needed for images to render on UI
               setPDF(objectURL);
             });

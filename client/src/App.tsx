@@ -10,7 +10,11 @@ const App = () => {
       <Container
         style={{ backgroundColor: gray, padding: "2vh", maxWidth: "none" }}
       >
-        <h3>Malta</h3>
+        <div>
+          <img src="OICR_logo.png" alt="OICR" height="65" width="90" />
+
+          <h2 style={{ display: "inline", marginLeft: "1.25rem" }}>Malta</h2>
+        </div>
       </Container>
       <GammaSelection />
     </>

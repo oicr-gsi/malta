@@ -153,20 +153,17 @@ def extract(path, data_unique_key, selected_folder, solution_filename):
     return data
 
 
-def get_alternate_solutions(gamma, selected_folder, solution_filename):
+def get_alternate_solutions(gamma, selected_folder):
     """
-    Extracts text data from all alternate solutions folders for a given gamma
+    Gets folder names of alternate solutions for a given gamma
 
     Args:
         gamma: Integer, gamma value
 
         selected_folder: String, name of selected data folder. 
             Example: PANX_1280_Lv_M_100-PM-022_LCM2.results.zip
-
-        solution_filename: String, filename of "model_fit" file for that zip folder. 
-            Example: PANX_1288_Pm_M_WG_100_JHU_004_LCM3_6_model_fit.pdf
         
-    Returns: List of dictionaries, each dictionary stores an alternate solution's data
+    Returns: List of Strings, alternate solution folder names
     """
     
     # List of subfolders (alternate solutions) in current directory
@@ -174,15 +171,10 @@ def get_alternate_solutions(gamma, selected_folder, solution_filename):
         subfolders = [item.filename for item in f.infolist() if item.is_dir()]
     
     # List of alternate solution folders of the desired gamma 
-    alternate_solution_folders = [folder_name for folder_name in subfolders if "sol" in folder_name and f"/{gamma}/" in folder_name]
+    alternate_solutions = [folder_name for folder_name in subfolders if "sol" in folder_name and f"/{gamma}/" in folder_name]
 
-    alternate_solutions_data = []
-    # extracting text data from every model_fit file that is in a solution subfolder
-    for idx, alt_solution in enumerate(alternate_solution_folders):
-        # passing in idx+1 for data_unique_key as 0 is for the ideal solution
-        alternate_solutions_data.append(extract(alt_solution, idx+1, selected_folder, solution_filename))
+    return alternate_solutions
     
-    return alternate_solutions_data
 
 
 def get_gamma_data(gamma, selected_folder, solution_filename):
@@ -206,11 +198,13 @@ def get_gamma_data(gamma, selected_folder, solution_filename):
     ideal_solution_data = extract(set_path(gamma), 0, selected_folder, solution_filename)
     data.append(ideal_solution_data)
     
-    alternate_solution_data = get_alternate_solutions(gamma, selected_folder, solution_filename)
+    alternate_solution_folders = get_alternate_solutions(gamma, selected_folder)
     
-    for alt_sol in alternate_solution_data:
-        data.append(alt_sol)
-
+    # extracting text data from every model_fit file that is in a solution subfolder
+    for idx, alt_solution in enumerate(alternate_solution_folders):
+        # passing in idx+1 for data_unique_key as 0 is for the ideal solution
+        data.append(extract(alt_solution, idx+1, selected_folder, solution_filename))
+    
     return data
 
 
@@ -222,4 +216,8 @@ def get_gamma_data(gamma, selected_folder, solution_filename):
 
 # load_dotenv()
 # my_data = get_gamma_data(100, str(os.getenv("TEST_DATA")), get_solution_name(str(os.getenv("TEST_DATA"))) )
+# print(my_data)
+
+# load_dotenv()
+# my_data = extract(100, 0, str(os.getenv("TEST_DATA")), get_solution_name(str(os.getenv("TEST_DATA"))))
 # print(my_data)

@@ -1,4 +1,5 @@
 import React, { Key } from "react";
+import { Spinner } from "react-bootstrap";
 import {
   DropdownLabel,
   DropdownOption,
@@ -17,9 +18,10 @@ export const DropdownMenu = (props: DropdownMenuProps) => {
 
   return (
     <>
-      <DropdownLabel>{label}</DropdownLabel>
+      <DropdownLabel htmlFor={label}>{label}</DropdownLabel>
       <br />
       <DropdownSelect
+        id={label}
         value={value}
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
           setValue(e.target.value);
@@ -34,7 +36,7 @@ export const DropdownMenu = (props: DropdownMenuProps) => {
             </DropdownOption>
           ))
         ) : (
-          <></>
+          <Spinner animation="border" variant="success" />
         )}
       </DropdownSelect>
     </>

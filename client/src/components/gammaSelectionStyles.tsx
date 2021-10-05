@@ -8,7 +8,9 @@ const fontSize = "18px";
 export const Textbox = styled.input`
   background-color: ${lightGreen};
   font-size: ${fontSize};
-  font-weight: 600;
+  font-weight: 400;
+  padding-left: 6px;
+  padding-bottom: 3px;
   color: ${white};
   border: none;
   opacity: 0.7;
@@ -58,6 +60,7 @@ export const DropdownSelect = styled.select`
   font-size: ${fontSize};
   font-weight: 400;
   margin-bottom: 0.5rem;
+  padding-bottom: 3px;
 `;
 
 export const DropdownOption = styled.option`

@@ -157,20 +157,22 @@ export const GammaSelection = () => {
 
         <Row>
           <Col>
-            <FormInputLabel>Cellularity</FormInputLabel>
+            <FormInputLabel htmlFor="cellularity">Cellularity</FormInputLabel>
             <Textbox
               type="text"
               name="cellularity"
+              id="cellularity"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setCellularity(e.target.value)
               }
             />
           </Col>
           <Col>
-            <FormInputLabel>Ploidy</FormInputLabel>
+            <FormInputLabel htmlFor="ploidy">Ploidy</FormInputLabel>
             <Textbox
               type="text"
               name="ploidy"
+              id="ploidy"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setPloidy(e.target.value)
               }

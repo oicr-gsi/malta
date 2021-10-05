@@ -1,13 +1,20 @@
 from flask import Flask, send_file, request, session
-from extraction import get_gamma_data, get_data_folders, get_gamma_options, get_solution_name
+from extraction import (
+    get_gamma_data,
+    get_data_folders,
+    get_gamma_options,
+    get_solution_name,
+)
 import os
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
 
+
 @app.route("/data_folders")
 def data_options():
     return {"data": get_data_folders()}
+
 
 @app.route("/selected_folder/<string:folder_name>", methods=["POST"])
 def selected_folder(folder_name):
@@ -38,8 +45,10 @@ def send_pdf():
     if request.method == "POST":
         path = request.get_json(force=True)
         # print(path)
-        return send_file(path)  
-    else: pass
+        return send_file(path)
+    else:
+        pass
+
 
 if __name__ == "__main__":
     app.run(debug=True)

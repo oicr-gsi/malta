@@ -5,29 +5,32 @@ from PyPDF2 import PdfFileReader
 from dotenv import load_dotenv
 import re
 
+
 def get_data_folders():
     """
-    Helper function to get available data folders 
+    Helper function to get available data folders
 
     Returns:
         List of Strings, names of zip files available in specified directory
     """
     load_dotenv()
-    return ([(f.name) for f in os.scandir(os.getenv("MALTA_DATA_FOLDER")) if is_zipfile(f)] )
+    return [
+        (f.name) for f in os.scandir(os.getenv("MALTA_DATA_FOLDER")) if is_zipfile(f)
+    ]
 
 
 def get_gamma_options(path):
     """
-        Gets names of gamma folders in a specified directory
+    Gets names of gamma folders in a specified directory
 
-        Args: 
-            path: String, path to zip folder
-        
-        Returns: 
-            List of integers, options for gamma dropdown
+    Args:
+        path: String, path to zip folder
+
+    Returns:
+        List of integers, options for gamma dropdown
     """
-    
-    with ZipFile(path, 'r') as f:
+
+    with ZipFile(path, "r") as f:
         folders = [info.filename for info in f.infolist() if info.is_dir()]
 
     filtered = []
@@ -49,7 +52,7 @@ def set_path(gamma):
     """
     Helper function to set the path inside the zip folder
 
-    Args: 
+    Args:
         gamma: Integer, gamma value
 
     Returns: String, path to chosen gamma from inside zip folder
@@ -61,15 +64,17 @@ def get_solution_name(selected_folder):
     """
     Helper function to find filename of "model_fit" file
 
-    Args: 
+    Args:
         selected_folder: String, name of selected data folder. Example: PANX_1280_Lv_M_100-PM-022_LCM2.results.zip
 
     Returns: String, filename of "model_fit" file for that zip folder. Example: PANX_1288_Pm_M_WG_100_JHU_004_LCM3_6_model_fit.pdf
     """
-    
-    with ZipFile(os.path.join(str(os.getenv("MALTA_DATA_FOLDER")), selected_folder), 'r') as f:
+
+    with ZipFile(
+        os.path.join(str(os.getenv("MALTA_DATA_FOLDER")), selected_folder), "r"
+    ) as f:
         names = [name for name in f.namelist() if "_model_fit.pdf" in name]
-    
+
     # accessing filename with [-1] as it is the last element of the split string
     pdf_files = [path.split("/")[-1] for path in names]
 
@@ -92,21 +97,20 @@ def jsonify_extracted_text(path, text, data_unique_key):
     Returns:
         Dictionary with id, file path to PDF, cellularity, ploidy, and sd.BAF values
     """
-    
-    split_data = text.split()
-    
-    json = {
-            "id": data_unique_key,
 
-            "path": path,
-            # cellularity: {cellularity_value}; indexing of -1 is needed to remove ':' from end of the string
-            f"{split_data[0][:-1]}": float(split_data[1]),
-            # ploidy: {ploidy_value}; indexing of -1 is needed to remove ':' from end of the string
-            f"{split_data[2][:-1]}": float(split_data[3]),
-            # sd.BAF: {sd.BAF_value}; indexing of -1 is needed to remove ':' from end of the string
-            f"{split_data[4][:-1]}": float(split_data[5])
+    split_data = text.split()
+
+    json = {
+        "id": data_unique_key,
+        "path": path,
+        # cellularity: {cellularity_value}; indexing of -1 is needed to remove ':' from end of the string
+        f"{split_data[0][:-1]}": float(split_data[1]),
+        # ploidy: {ploidy_value}; indexing of -1 is needed to remove ':' from end of the string
+        f"{split_data[2][:-1]}": float(split_data[3]),
+        # sd.BAF: {sd.BAF_value}; indexing of -1 is needed to remove ':' from end of the string
+        f"{split_data[4][:-1]}": float(split_data[5]),
     }
-    
+
     return json
 
 
@@ -119,27 +123,28 @@ def extract(path, data_unique_key, selected_folder, solution_filename):
 
         data_unique_key: Integer, a unique id for each solution
 
-        selected_folder: String, name of selected data folder. 
+        selected_folder: String, name of selected data folder.
             Example: PANX_1280_Lv_M_100-PM-022_LCM2.results.zip
 
-        solution_filename: String, filename of "model_fit" file for that zip folder. 
+        solution_filename: String, filename of "model_fit" file for that zip folder.
             Example: PANX_1288_Pm_M_WG_100_JHU_004_LCM3_6_model_fit.pdf
 
     Returns:
         data: Dictionary, extracted data from a PDF file
     """
-    
-    with ZipFile(os.path.join(str(os.getenv("MALTA_DATA_FOLDER")), selected_folder), 'r') as f:
+
+    with ZipFile(
+        os.path.join(str(os.getenv("MALTA_DATA_FOLDER")), selected_folder), "r"
+    ) as f:
         file_path = path + solution_filename
         f.extract(file_path, str(os.getenv("MALTA_DATA_FOLDER")))
-    
-    
+
     extracted_path = os.path.join(str(os.getenv("MALTA_DATA_FOLDER")), file_path)
     pdf = PdfFileReader(extracted_path)
 
     data = {}
 
-        # model_fit files have one page only, hence getPage(0) 
+    # model_fit files have one page only, hence getPage(0)
     pageObj = pdf.getPage(0)
     try:
         # extracted text
@@ -149,7 +154,7 @@ def extract(path, data_unique_key, selected_folder, solution_filename):
 
     except:
         pass
-    
+
     return data
 
 
@@ -160,21 +165,26 @@ def get_alternate_solutions(gamma, selected_folder):
     Args:
         gamma: Integer, gamma value
 
-        selected_folder: String, name of selected data folder. 
+        selected_folder: String, name of selected data folder.
             Example: PANX_1280_Lv_M_100-PM-022_LCM2.results.zip
-        
+
     Returns: List of Strings, alternate solution folder names
     """
-    
+
     # List of subfolders (alternate solutions) in current directory
-    with ZipFile(os.path.join(str(os.getenv("MALTA_DATA_FOLDER")), selected_folder), 'r') as f:
+    with ZipFile(
+        os.path.join(str(os.getenv("MALTA_DATA_FOLDER")), selected_folder), "r"
+    ) as f:
         subfolders = [item.filename for item in f.infolist() if item.is_dir()]
-    
-    # List of alternate solution folders of the desired gamma 
-    alternate_solutions = [folder_name for folder_name in subfolders if "sol" in folder_name and f"/{gamma}/" in folder_name]
+
+    # List of alternate solution folders of the desired gamma
+    alternate_solutions = [
+        folder_name
+        for folder_name in subfolders
+        if "sol" in folder_name and f"/{gamma}/" in folder_name
+    ]
 
     return alternate_solutions
-    
 
 
 def get_gamma_data(gamma, selected_folder, solution_filename):
@@ -184,10 +194,10 @@ def get_gamma_data(gamma, selected_folder, solution_filename):
     Args:
         gamma: Integer, gamma value
 
-        selected_folder: String, name of selected data folder. 
+        selected_folder: String, name of selected data folder.
             Example: PANX_1280_Lv_M_100-PM-022_LCM2.results.zip
 
-        solution_filename: String, filename of "model_fit" file for that zip folder. 
+        solution_filename: String, filename of "model_fit" file for that zip folder.
             Example: PANX_1288_Pm_M_WG_100_JHU_004_LCM3_6_model_fit.pdf
 
     Returns:
@@ -195,19 +205,19 @@ def get_gamma_data(gamma, selected_folder, solution_filename):
     """
     data = []
 
-    ideal_solution_data = extract(set_path(gamma), 0, selected_folder, solution_filename)
+    ideal_solution_data = extract(
+        set_path(gamma), 0, selected_folder, solution_filename
+    )
     data.append(ideal_solution_data)
-    
+
     alternate_solution_folders = get_alternate_solutions(gamma, selected_folder)
-    
+
     # extracting text data from every model_fit file that is in a solution subfolder
     for idx, alt_solution in enumerate(alternate_solution_folders):
         # passing in idx+1 for data_unique_key as 0 is for the ideal solution
-        data.append(extract(alt_solution, idx+1, selected_folder, solution_filename))
-    
+        data.append(extract(alt_solution, idx + 1, selected_folder, solution_filename))
+
     return data
-
-
 
 
 # #testing code

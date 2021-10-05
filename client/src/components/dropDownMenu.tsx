@@ -21,7 +21,7 @@ export const DropdownMenu = (props: DropdownMenuProps) => {
       <br />
       <DropdownSelect
         value={value}
-        onChange={(e) => {
+        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
           setValue(e.target.value);
         }}
       >

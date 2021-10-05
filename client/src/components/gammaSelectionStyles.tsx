@@ -20,11 +20,14 @@ export const FormItemCol = styled(Col)`
   padding-right: 1rem;
 `;
 
-export const SubmitButton = styled(Button)`
-  background-color: ${darkGreen};
+export const SubmitButton = styled.button`
+  background-color: ${(props: { disabled: boolean }) =>
+    props.disabled ? lightGreen : darkGreen};
+  opacity: ${(props: { disabled: boolean }) => (props.disabled ? "0.4" : "1")};
   font-size: ${fontSize};
   font-weight: 600;
   width: 180px;
+  height: 70%;
   color: ${white};
   border: none;
   border-radius: 30px;

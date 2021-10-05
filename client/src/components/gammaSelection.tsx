@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Spinner } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { Container, Row, Col, Spinner } from "react-bootstrap";
+
 import { SubmitButton, Textbox, FormInputLabel } from "./gammaSelectionStyles";
 import { DropdownMenu } from "./dropDownMenu";
 import { ImageGrid } from "./imageGrid";
@@ -13,7 +14,7 @@ interface SolutionData {
   id: Number;
   cellularity: Number;
   ploidy: Number;
-  // quotes required to prevent '.' from creating an error
+  // quotes required to prevent '.' in sd.BAF from creating an error
   "sd.BAF": Number;
   path: String;
 }
@@ -160,7 +161,9 @@ export const GammaSelection = () => {
             <Textbox
               type="text"
               name="cellularity"
-              onChange={(e) => setCellularity(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setCellularity(e.target.value)
+              }
             />
           </Col>
           <Col>
@@ -168,11 +171,18 @@ export const GammaSelection = () => {
             <Textbox
               type="text"
               name="ploidy"
-              onChange={(e) => setPloidy(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setPloidy(e.target.value)
+              }
             />
           </Col>
           <Col style={{ position: "relative" }}>
-            <SubmitButton onClick={handleFormSubmit}>Submit</SubmitButton>
+            <SubmitButton
+              disabled={!cellularity || !ploidy}
+              onClick={handleFormSubmit}
+            >
+              Submit
+            </SubmitButton>
           </Col>
           {/* these three columns make row spacing even and compact*/}
           <Col></Col>

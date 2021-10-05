@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Col, Spinner } from "react-bootstrap";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { SubmitButton, Textbox, FormInputLabel } from "./gammaSelectionStyles";
 import { DropdownMenu } from "./dropDownMenu";
@@ -122,6 +124,13 @@ export const GammaSelection = () => {
       cellularity_submit,
       ploidy_submit,
     });
+    toast.success("Submitted to database", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: false,
+    });
   };
 
   return (
@@ -185,6 +194,7 @@ export const GammaSelection = () => {
             >
               Submit
             </SubmitButton>
+            <ToastContainer />
           </Col>
           {/* these three columns make row spacing even and compact*/}
           <Col></Col>

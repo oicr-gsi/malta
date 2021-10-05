@@ -1,3 +1,4 @@
+import os
 from flask import Flask, send_file, request, session
 from extraction import (
     get_gamma_data,
@@ -5,7 +6,7 @@ from extraction import (
     get_gamma_options,
     get_solution_name,
 )
-import os
+
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
@@ -45,6 +46,8 @@ def send_pdf():
     if request.method == "POST":
         path = request.get_json(force=True)
         # print(path)
+        # The path passed in here is not influenced by the user. It is the path returned by the /data route, which was then automatically
+        # used to call this route
         return send_file(path)
     else:
         pass

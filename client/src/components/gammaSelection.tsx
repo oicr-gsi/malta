@@ -33,7 +33,7 @@ export const GammaSelection = () => {
   // state variables for images display and plot data
   const [data, setData] = useState<Data>();
   const [PDF, setPDF] = useState<String>();
-  const [images, setImages] = useState<String[]>([]);
+  const [images, setImages] = useState<String[]>();
 
   // state variables for submitting to database
   const [selectedFolder, setSelectedFolder] = useState<any>();
@@ -119,10 +119,10 @@ export const GammaSelection = () => {
     let cellularity_submit = Number(cellularity);
     let ploidy_submit = Number(ploidy);
     console.log({
-      selectedFolder,
-      gamma_submit,
-      cellularity_submit,
-      ploidy_submit,
+      "selected-folder": selectedFolder,
+      gamma: gamma_submit,
+      cellularity: cellularity_submit,
+      ploidy: ploidy_submit,
     });
     toast.success("Submitted to database", {
       position: "top-right",
@@ -138,7 +138,7 @@ export const GammaSelection = () => {
       <Container style={{ paddingTop: "2vh" }}>
         <p>
           Select a gamma value to get started. Choose a solution by clicking on
-          a plot. The first plot is the primary solution.
+          a plot. {images && <>The first plot is the primary solution.</>}
         </p>
       </Container>
       <Container style={{ paddingRight: "3vw", paddingLeft: "3vw" }}>

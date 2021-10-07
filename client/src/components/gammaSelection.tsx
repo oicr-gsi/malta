@@ -137,8 +137,8 @@ export const GammaSelection = () => {
     <>
       <Container style={{ paddingTop: "2vh" }}>
         <p>
-          Select a gamma value to get started. Choose a solution by clicking on
-          a plot. {images && <>The first plot is the primary solution.</>}
+          Select a folder to get started, then choose a gamma.{" "}
+          {images && <>The first plot is the primary solution.</>}
         </p>
       </Container>
       <Container style={{ paddingRight: "3vw", paddingLeft: "3vw" }}>

@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { SubmitButton, Textbox, FormInputLabel } from "./gammaSelectionStyles";
 import { DropdownMenu } from "./dropDownMenu";
 import { ImageGrid } from "./imageGrid";
+import { PrimarySolutionPage } from "./primarySolutionPage";
 
 interface Data {
   gamma: SolutionData[];
@@ -41,6 +42,8 @@ export const GammaSelection = () => {
   const [cellularity, setCellularity] = useState<String>();
   const [ploidy, setPloidy] = useState<String>();
 
+  const [primaryPlots, setPrimaryPlots] = useState([]);
+
   // fetches available data folders on page load
   useEffect(() => {
     setLoading(true);
@@ -71,6 +74,18 @@ export const GammaSelection = () => {
       getData();
     }
   }, [gamma]);
+
+  useEffect(() => {
+    if (selectedFolder) {
+      console.log("useffect");
+      fetch("/primary")
+        .then((res) => res.json())
+        .then((res) => {
+          setPrimaryPlots(res["data"]);
+          console.log(primaryPlots);
+        });
+    }
+  }, [selectedFolder]);
 
   // fetches plots and data
   const getData = () => {
@@ -211,6 +226,10 @@ export const GammaSelection = () => {
         ) : (
           images && <ImageGrid data={images} />
         )}
+        <br />
+        <br />
+        <br />
+        <PrimarySolutionPage gammas={options} images={primaryPlots} />
       </Container>
     </>
   );

@@ -1,4 +1,5 @@
 import React, { Key } from "react";
+import ImageFadeIn from "react-image-fade-in";
 
 export const ImageGrid = (props: { data: String[] }) => {
   const { data } = props;

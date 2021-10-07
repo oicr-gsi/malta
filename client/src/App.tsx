@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { GammaSelection } from "./components/gammaSelection";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { Container } from "react-bootstrap";
 import { Theme } from "./globalStyles";
+import { PrimarySolutionPage } from "./components/primarySolutionPage";
 
 const App = () => {
   const { gray } = Theme;
@@ -17,6 +19,7 @@ const App = () => {
         </div>
       </Container>
       <GammaSelection />
+      {/* <PrimarySolutionPage /> */}
     </>
   );
 };

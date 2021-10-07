@@ -220,12 +220,39 @@ def get_gamma_data(gamma, selected_folder, solution_filename):
     return data
 
 
+def get_primary_solutions_data(selected_folder):
+    data = []
+    data_path = os.path.join(os.getenv("MALTA_DATA_FOLDER"), selected_folder)
+    solution_filename = get_solution_name(selected_folder)
+    gammas = get_gamma_options(data_path)
+
+    for gamma in gammas:
+        data.append(
+            {gamma: extract(set_path(gamma), 0, selected_folder, solution_filename)}
+        )
+
+    return data
+
+
+def send_primary_data(selected_folder):
+    # selected_folder = session["selected_data_folder"]
+    data = get_primary_solutions_data(selected_folder)
+    data_path = os.path.join(os.getenv("MALTA_DATA_FOLDER"), selected_folder)
+    gammas = get_gamma_options(data_path)
+
+    files = []
+    for i, gamma in enumerate(gammas):
+        files.append(data[i][gamma]["path"])
+
+    return files
+
+
 # #testing code
 # BASE_FILEPATH = os.path.join(os.getenv("MALTA_DATA_FOLDER"), str(os.getenv("TEST_DATA")))
 # BASE_FILEPATH = os.path.join(BASE_FILEPATH, "gammas")
 
 # load_dotenv()
-# my_data = get_gamma_data(100, str(os.getenv("TEST_DATA")), get_solution_name(str(os.getenv("TEST_DATA"))) )
+# my_data = send_primary_data(str(os.getenv("TEST_DATA")))
 # print(my_data)
 
 # load_dotenv()

@@ -5,6 +5,7 @@ from extraction import (
     get_data_folders,
     get_gamma_options,
     get_solution_name,
+    get_primary_solutions_data,
 )
 
 
@@ -51,6 +52,21 @@ def send_pdf():
         return send_file(path)
     else:
         pass
+
+
+@app.route("/primary")
+def send_primary_data():
+    selected_folder = session["selected_data_folder"]
+    data_path = os.path.join(os.getenv("MALTA_DATA_FOLDER"), selected_folder)
+
+    gammas = get_gamma_options(data_path)
+    data = get_primary_solutions_data(selected_folder)
+
+    files = []
+    for i, gamma in enumerate(gammas):
+        files.append(data[i][gamma]["path"])
+
+    return {"data": files}
 
 
 if __name__ == "__main__":

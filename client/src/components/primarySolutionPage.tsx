@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import styled from "styled-components";
+import { Spinner } from "react-bootstrap";
 
 export const PrimarySolutionPage = (props) => {
   const [values, setValues] = useState([1, 3, 5, 10, 20, 50, 100]);
@@ -27,11 +29,17 @@ export const PrimarySolutionPage = (props) => {
       }
       setPlots(pdfs);
     }
-  }, []);
+  }, [images]);
 
   const handleInputChange = (e) => {
     setIndex(e.currentTarget.value);
   };
+
+  useEffect(() => console.log(index), [index]);
+
+  const Plot = styled.embed`
+    display: ${(props) => (props.show ? "block" : "none")};
+  `;
 
   return (
     <div>
@@ -63,15 +71,21 @@ export const PrimarySolutionPage = (props) => {
       <br />
       {images ? <span id="output">{images[index]}</span> : <></>}
       {plots ? (
-        <embed
-          // #toolbar=0 is needed to remove built-in pdf viewer and make it look like an image
-          src={plots[index] + "#toolbar=0"}
-          width="500"
-          height="500"
-          //   type="application/pdf"
-        />
+        plots.map((plot, key) => {
+          return (
+            <Plot
+              // #toolbar=0 is needed to remove built-in pdf viewer and make it look like an image
+              src={plot + "#toolbar=0"}
+              width="500"
+              height="500"
+              key={key}
+              type="application/pdf"
+              show={key == index}
+            />
+          );
+        })
       ) : (
-        <></>
+        <Spinner animation="border" variant="success" />
       )}
     </div>
   );

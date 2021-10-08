@@ -54,19 +54,22 @@ def send_pdf():
         pass
 
 
-@app.route("/primary")
-def send_primary_data():
-    selected_folder = session["selected_data_folder"]
-    data_path = os.path.join(os.getenv("MALTA_DATA_FOLDER"), selected_folder)
+@app.route("/primary/<string:folder_name>", methods=["POST"])
+def send_primary_data(folder_name):
+    if request.method == "POST":
+        session["selected_data_folder"] = folder_name
+        data_path = os.path.join(os.getenv("MALTA_DATA_FOLDER"), folder_name)
 
-    gammas = get_gamma_options(data_path)
-    data = get_primary_solutions_data(selected_folder)
+        gammas = get_gamma_options(data_path)
+        data = get_primary_solutions_data(folder_name)
 
-    files = []
-    for i, gamma in enumerate(gammas):
-        files.append(data[i][gamma]["path"])
+        files = []
+        for i, gamma in enumerate(gammas):
+            files.append(data[i][gamma]["path"])
 
-    return {"data": files}
+        return {"data": files}
+    else:
+        pass
 
 
 if __name__ == "__main__":

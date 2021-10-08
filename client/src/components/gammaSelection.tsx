@@ -77,8 +77,10 @@ export const GammaSelection = () => {
 
   useEffect(() => {
     if (selectedFolder) {
-      console.log("useffect");
-      fetch("/primary")
+      console.log("primary plots useffect");
+      fetch(`/primary/${selectedFolder}`, {
+        method: "POST",
+      })
         .then((res) => res.json())
         .then((res) => {
           setPrimaryPlots(res["data"]);

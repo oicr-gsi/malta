@@ -220,6 +220,10 @@ export const GammaSelection = () => {
         </Row>
       </Container>
 
+      {selectedFolder && (
+        <PrimarySolutionPage gammas={options} images={primaryPlots} />
+      )}
+
       <Container style={{ paddingTop: "5vh" }}>
         {loading ? (
           <div style={{ paddingLeft: "2vw" }}>
@@ -231,7 +235,6 @@ export const GammaSelection = () => {
         <br />
         <br />
         <br />
-        <PrimarySolutionPage gammas={options} images={primaryPlots} />
       </Container>
     </>
   );

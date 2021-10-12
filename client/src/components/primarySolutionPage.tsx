@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import styled from "styled-components";
 import { Container, Spinner } from "react-bootstrap";
+import { FormInputLabel } from "./gammaSelectionStyles";
 
 export const PrimarySolutionPage = (props) => {
-  const [values, setValues] = useState([1, 3, 5, 10, 20, 50, 100]);
   const [index, setIndex] = useState(0);
   const [plots, setPlots] = useState<any>();
-  const [PDF, setPDF] = useState<any>();
   const [primaryLoading, setPrimaryLoading] = useState(false);
 
   const { gammas, images } = props;
@@ -25,8 +24,6 @@ export const PrimarySolutionPage = (props) => {
           .then((blob) => {
             let objectURL = URL.createObjectURL(blob);
             pdfs.push(objectURL);
-            // this line is needed for images to render on UI
-            setPDF(objectURL);
           })
           .finally(() => setPrimaryLoading(false));
       }
@@ -38,8 +35,6 @@ export const PrimarySolutionPage = (props) => {
     setIndex(e.currentTarget.value);
   };
 
-  useEffect(() => console.log(index), [index]);
-
   const Plot = styled.embed`
     display: ${(props) => (props.show ? "block" : "none")};
   `;
@@ -50,6 +45,10 @@ export const PrimarySolutionPage = (props) => {
         <Spinner animation="border" variant="success" />
       ) : (
         <>
+          {gammas["data"] && (
+            <FormInputLabel>Gamma: {gammas["data"][index]}</FormInputLabel>
+          )}
+          <br />
           <input
             onInput={handleInputChange}
             type="range"
@@ -59,6 +58,7 @@ export const PrimarySolutionPage = (props) => {
             step="1"
             list="tick-list"
           />
+
           <datalist id="tick-list">
             {gammas["data"] ? (
               gammas["data"].map((option, key) => (
@@ -70,7 +70,7 @@ export const PrimarySolutionPage = (props) => {
               <>Loading</>
             )}
           </datalist>
-          {gammas["data"] && <span id="output">{gammas["data"][index]}</span>}
+
           <br />
           {plots &&
             plots.map((plot, key) => (
@@ -82,6 +82,7 @@ export const PrimarySolutionPage = (props) => {
                 key={key}
                 type="application/pdf"
                 show={key == index}
+                // must be "==" for images to show
               />
             ))}
         </>

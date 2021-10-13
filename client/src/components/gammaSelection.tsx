@@ -77,14 +77,12 @@ export const GammaSelection = () => {
 
   useEffect(() => {
     if (selectedFolder) {
-      console.log("primary plots useffect");
       fetch(`/primary/${selectedFolder}`, {
         method: "POST",
       })
         .then((res) => res.json())
         .then((res) => {
-          setPrimaryPlots(res["data"]);
-          console.log(primaryPlots);
+          setPrimaryPlots(res);
         });
     }
   }, [selectedFolder]);
@@ -206,7 +204,7 @@ export const GammaSelection = () => {
           </Col>
           <Col style={{ position: "relative" }}>
             <SubmitButton
-              disabled={!cellularity || !ploidy}
+              disabled={!(cellularity && ploidy)}
               onClick={handleFormSubmit}
             >
               Submit
@@ -221,7 +219,11 @@ export const GammaSelection = () => {
       </Container>
 
       {selectedFolder && (
-        <PrimarySolutionPage gammas={options} images={primaryPlots} />
+        <PrimarySolutionPage
+          gammas={options}
+          images={primaryPlots["model_fit"]}
+          genomeViews={primaryPlots["genome_view"]}
+        />
       )}
 
       <Container style={{ paddingTop: "5vh" }}>

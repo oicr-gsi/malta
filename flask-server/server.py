@@ -4,8 +4,7 @@ from extraction import (
     get_gamma_data,
     get_data_folders,
     get_gamma_options,
-    get_solution_name,
-    get_primary_solutions_data,
+    get_primary_solutions_plots,
 )
 
 
@@ -37,8 +36,7 @@ def data(gamma):
     if request.method == "POST":
         # print("gamma from front end", gamma)
         selected_folder = session["selected_data_folder"]
-        solution_filename = get_solution_name(session["selected_data_folder"])
-        data = get_gamma_data(gamma, selected_folder, solution_filename)
+        data = get_gamma_data(gamma, selected_folder)
         return {gamma: data}
 
 
@@ -58,16 +56,11 @@ def send_pdf():
 def send_primary_data(folder_name):
     if request.method == "POST":
         session["selected_data_folder"] = folder_name
-        data_path = os.path.join(os.getenv("MALTA_DATA_FOLDER"), folder_name)
 
-        gammas = get_gamma_options(data_path)
-        data = get_primary_solutions_data(folder_name)
-
-        files = []
-        for i, gamma in enumerate(gammas):
-            files.append(data[i][gamma]["path"])
-
-        return {"data": files}
+        model_fit_data = get_primary_solutions_plots(folder_name, "_model_fit.pdf")
+        genome_view_data = get_primary_solutions_plots(folder_name, "_genome_view.pdf")
+ 
+        return {"model_fit": model_fit_data, "genome_view": genome_view_data}
     else:
         pass
 

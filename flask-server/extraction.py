@@ -245,8 +245,6 @@ def extract_file(path, selected_folder, filename):
     return full_path
 
 
-
-
 # #testing code
 # BASE_FILEPATH = os.path.join(os.getenv("MALTA_DATA_FOLDER"), str(os.getenv("TEST_DATA")))
 # BASE_FILEPATH = os.path.join(BASE_FILEPATH, "gammas")

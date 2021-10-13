@@ -131,7 +131,9 @@ export const PrimarySolutionPage = (props) => {
             </Col>
           </Row>
           <br />
-          {/* <Row>
+          {/* 
+          Option: place genome plots on their own row for better visibility 
+          <Row>
             <Col>
               {genomePlots &&
                 genomePlots.map((view, key) => (

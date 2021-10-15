@@ -39,6 +39,8 @@ unique = zips.drop_duplicates(subset=["Name"])
 names = list(unique["Name"].head(dropdown_count))
 paths = list(unique["File Path"].head(dropdown_count))
 
+os.mkdir("./malta_data")
+os.chdir("./malta_data")
 for i in range(dropdown_count):
     # print(f"{i}. {names[i]} ==> {paths[i]}")
     os.symlink(paths[i], names[i])

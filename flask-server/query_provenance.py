@@ -10,8 +10,8 @@ dropdown_count = int(os.getenv("DROPDOWN_COUNT")) if os.getenv("DROPDOWN_COUNT")
 provenance_file = str(os.getenv("LATEST_PROVENANCE"))
 
 # relevant only when using a reduced file: cut -f 1,2,31,47 
-column_names = ["Last Modified", "Study Title", "Workflow Name", "File Path"]
-df = pd.read_csv(provenance_file, names=column_names, delimiter="\t")
+# column_names = ["Last Modified", "Study Title", "Workflow Name", "File Path"]
+df = pd.read_csv(provenance_file, delimiter="\t")
 
 # filter by workflow name, only sequenza output
 df.loc[df["Workflow Name"] == "sequenza", :]

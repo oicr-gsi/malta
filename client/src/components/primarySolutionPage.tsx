@@ -10,6 +10,7 @@ export const PrimarySolutionPage = (props) => {
   const [genomePlots, setGenomePlots] = useState<any>();
   const [primaryLoading, setPrimaryLoading] = useState(false);
   const [PDF, setPDF] = useState<any>();
+
   const { gammas, images, genomeViews } = props;
 
   useEffect(() => {

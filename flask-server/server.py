@@ -20,14 +20,12 @@ def data_options():
 @app.route("/selected_folder/<string:folder_name>", methods=["POST"])
 def selected_folder(folder_name):
     if request.method == "POST":
-        # print("\nselected folder:", folder_name, "\n")
         session["selected_data_folder"] = folder_name
         return gamma_options(folder_name)
 
 
 def gamma_options(folder_name):
     data_path = os.path.join(os.getenv("MALTA_DATA_FOLDER"), folder_name)
-    # print(data_path)
     return {"data": get_gamma_options(data_path)}
 
 
@@ -44,7 +42,6 @@ def data(gamma):
 def send_pdf():
     if request.method == "POST":
         path = request.get_json(force=True)
-        # print(path)
         # The path passed in here is not influenced by the user.
         # It is the path returned by the /data route, which was then automatically used to call this route
         return send_file(path)
@@ -56,7 +53,7 @@ def send_pdf():
 def send_primary_data(folder_name):
     if request.method == "POST":
         session["selected_data_folder"] = folder_name
-
+        
         model_fit_data = get_primary_solutions_plots(folder_name, "_model_fit.pdf")
         genome_view_data = get_primary_solutions_plots(folder_name, "_genome_view.pdf")
  

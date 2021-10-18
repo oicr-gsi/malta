@@ -237,8 +237,8 @@ export const GammaSelection = () => {
           genomeViewsPaths={primaryPlots["genome_view"]}
         />
       )}
-
-      <Container style={{ paddingTop: "5vh" }}>
+      <br />
+      <Container style={{ paddingTop: "2vh" }}>
         {loading ? (
           <div style={{ paddingLeft: "2vw" }}>
             <Spinner animation="border" variant="success" />
@@ -246,9 +246,6 @@ export const GammaSelection = () => {
         ) : (
           images && <ImageGrid data={images} />
         )}
-        <br />
-        <br />
-        <br />
       </Container>
     </>
   );

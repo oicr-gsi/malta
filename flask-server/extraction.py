@@ -211,6 +211,19 @@ def get_gamma_data(gamma, selected_folder):
 
 
 def get_primary_solutions_plots(selected_folder, filename):
+    """
+    Gets primary solutions data for a selected folder 
+
+    Args:
+        selected_folder: String, name of selected data folder.
+            Example: PANX_1280_Lv_M_100-PM-022_LCM2.results.zip
+
+        filename: String, unique part of end of filename. Example: "_model_fit.pdf" in PANX_1288_Pm_M_WG_100_JHU_004_LCM3_6_model_fit.pdf
+    
+    Returns:
+        data: List of Strings, each string is a filepath to a primary plot (model_fit or genome_view)
+    """
+    
     data = []
     data_path = os.path.join(os.getenv("MALTA_DATA_FOLDER"), selected_folder)
     gammas = get_gamma_options(data_path)
@@ -219,6 +232,7 @@ def get_primary_solutions_plots(selected_folder, filename):
         data.append(extract_file(set_path(gamma), selected_folder, filename))
     
     return data
+
 
 def extract_file(path, selected_folder, filename):
     """

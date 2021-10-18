@@ -125,12 +125,11 @@ export const PrimarySolutionPage = (props: PrimarySolutionPageProps) => {
                     key={key}
                     type="application/pdf"
                     show={key == index}
-                    // must be "==" for images to show
+                    // must be "==" for images to show, values must match - typecheck is not necessary
                   />
                 ))}
             </Col>
           </Row>
-          <br />
         </>
       )}
     </Container>

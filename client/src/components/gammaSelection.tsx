@@ -191,7 +191,7 @@ export const GammaSelection = () => {
           )}
         </Row>
 
-        <Row>
+        {/* <Row>
           <Col>
             <FormInputLabel htmlFor="cellularity">Cellularity</FormInputLabel>
             <Textbox
@@ -222,12 +222,12 @@ export const GammaSelection = () => {
               Submit
             </SubmitButton>
             <ToastContainer />
-          </Col>
-          {/* these three columns make row spacing even and compact*/}
+          </Col> */}
+        {/* these three columns make row spacing even and compact*/}
+        {/* <Col></Col>
           <Col></Col>
           <Col></Col>
-          <Col></Col>
-        </Row>
+        </Row> */}
       </Container>
 
       {selectedFolder && (

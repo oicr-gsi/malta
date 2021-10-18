@@ -28,24 +28,24 @@ export const GammaSelection = () => {
   const [error, setError] = useState<Boolean>();
 
   // state variables for dropdown menu options
-  const [options, setOptions] = useState<Number[]>([]);
+  const [gammaOptions, setGammaOptions] = useState<Number[]>([]);
   const [folders, setFolders] = useState<String[]>([]);
 
   // state variables for images display and plot data; all fields of data are currently not used, but will be needed when auto-populating fields
   // eslint-disable-next-line
   const [data, setData] = useState<Data>();
-  // this variable is needed for images to render on UI
+  // PDF variable is needed for images to render on UI
   // eslint-disable-next-line
   const [PDF, setPDF] = useState<String>();
   const [images, setImages] = useState<String[]>();
 
   // state variables for submitting to database
-  const [selectedFolder, setSelectedFolder] = useState<any>();
+  const [selectedFolder, setSelectedFolder] = useState<String>();
   const [gamma, setGamma] = useState<Number>();
   const [cellularity, setCellularity] = useState<String>();
   const [ploidy, setPloidy] = useState<String>();
 
-  const [primaryPlots, setPrimaryPlots] = useState([]);
+  const [primaryPlots, setPrimaryPlots] = useState<String[]>([]);
 
   // fetches available sequenza data folders on page load
   useEffect(() => {
@@ -66,7 +66,7 @@ export const GammaSelection = () => {
         method: "POST",
       })
         .then((res) => res.json())
-        .then((res) => setOptions(res));
+        .then((res) => setGammaOptions(res));
     }
   }, [selectedFolder]);
 
@@ -121,7 +121,6 @@ export const GammaSelection = () => {
         setImages(pdfs);
         setData(gamma_data);
       })
-
       .catch((err) => {
         setError(err);
       })
@@ -136,6 +135,7 @@ export const GammaSelection = () => {
     let gamma_submit = Number(gamma);
     let cellularity_submit = Number(cellularity);
     let ploidy_submit = Number(ploidy);
+    // submit to DB
     console.log({
       "selected-folder": selectedFolder,
       gamma: gamma_submit,
@@ -185,7 +185,7 @@ export const GammaSelection = () => {
                 label="Gamma"
                 value={gamma}
                 setValue={setGamma}
-                data={options}
+                data={gammaOptions}
               />
             </Col>
           )}
@@ -232,9 +232,9 @@ export const GammaSelection = () => {
 
       {selectedFolder && (
         <PrimarySolutionPage
-          gammas={options}
-          primaryPlotImages={primaryPlots["model_fit"]}
-          genomeViews={primaryPlots["genome_view"]}
+          gammas={gammaOptions}
+          primaryPlotImagePaths={primaryPlots["model_fit"]}
+          genomeViewsPaths={primaryPlots["genome_view"]}
         />
       )}
 

@@ -10,6 +10,7 @@ interface DropdownMenuProps {
   data: String[] | Number[];
   label: String;
   value: String | Number;
+  // sets value to a String or Number:
   setValue: any;
 }
 

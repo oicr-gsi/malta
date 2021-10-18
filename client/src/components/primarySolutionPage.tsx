@@ -6,28 +6,32 @@ import { FormInputLabel } from "./gammaSelectionStyles";
 
 interface PrimarySolutionPageProps {
   gammas: Number[];
-  primaryPlotImages: String[];
-  genomeViews: String[];
+  primaryPlotImagePaths: String[];
+  genomeViewsPaths: String[];
 }
+
+const Plot = styled.embed`
+  display: ${(props: { show: Boolean }) => (props.show ? "block" : "none")};
+`;
 
 export const PrimarySolutionPage = (props: PrimarySolutionPageProps) => {
   const [index, setIndex] = useState(0);
   const [plots, setPlots] = useState<String[]>();
   const [genomePlots, setGenomePlots] = useState<String[]>();
   const [primaryLoading, setPrimaryLoading] = useState(false);
-  // this variable is needed for images to render on UI
+  // PDF variable is needed for images to render on UI
   // eslint-disable-next-line
   const [PDF, setPDF] = useState<String>();
 
-  const { gammas, primaryPlotImages, genomeViews } = props;
+  const { gammas, primaryPlotImagePaths, genomeViewsPaths } = props;
 
   useEffect(() => {
-    getImagesFromPaths(primaryPlotImages, setPlots, setPrimaryLoading);
-  }, [primaryPlotImages]);
+    getImagesFromPaths(primaryPlotImagePaths, setPlots, setPrimaryLoading);
+  }, [primaryPlotImagePaths]);
 
   useEffect(() => {
-    getImagesFromPaths(genomeViews, setGenomePlots, setPrimaryLoading);
-  }, [genomeViews]);
+    getImagesFromPaths(genomeViewsPaths, setGenomePlots, setPrimaryLoading);
+  }, [genomeViewsPaths]);
 
   const getImagesFromPaths = (
     data: String[],
@@ -59,10 +63,6 @@ export const PrimarySolutionPage = (props: PrimarySolutionPageProps) => {
     setIndex(e.currentTarget.value);
   };
 
-  const Plot = styled.embed`
-    display: ${(props: { show: Boolean }) => (props.show ? "block" : "none")};
-  `;
-
   return (
     <Container style={{ paddingTop: "1rem", paddingLeft: "3vw" }}>
       {primaryLoading ? (
@@ -73,6 +73,7 @@ export const PrimarySolutionPage = (props: PrimarySolutionPageProps) => {
             <FormInputLabel>Gamma: {gammas["data"][index]}</FormInputLabel>
           )}
           <br />
+
           <input
             onInput={handleInputChange}
             type="range"
@@ -116,18 +117,16 @@ export const PrimarySolutionPage = (props: PrimarySolutionPageProps) => {
             <Col>
               {genomePlots &&
                 genomePlots.map((view, key) => (
-                  <div style={{ borderColor: "black" }}>
-                    <Plot
-                      // #toolbar=0 is needed to remove built-in pdf viewer and make it look like an image
-                      src={view + "#toolbar=0"}
-                      width="100%"
-                      height="400"
-                      key={key}
-                      type="application/pdf"
-                      show={key == index}
-                      // must be "==" for images to show
-                    />
-                  </div>
+                  <Plot
+                    // #toolbar=0 is needed to remove built-in pdf viewer and make it look like an image
+                    src={view + "#toolbar=0"}
+                    width="100%"
+                    height="400"
+                    key={key}
+                    type="application/pdf"
+                    show={key == index}
+                    // must be "==" for images to show
+                  />
                 ))}
             </Col>
           </Row>

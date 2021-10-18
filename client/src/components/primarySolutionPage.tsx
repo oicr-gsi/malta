@@ -1,58 +1,59 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Key } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import styled from "styled-components";
 import { Container, Spinner, Row, Col } from "react-bootstrap";
 import { FormInputLabel } from "./gammaSelectionStyles";
 
-export const PrimarySolutionPage = (props) => {
+interface PrimarySolutionPageProps {
+  gammas: Number[];
+  primaryPlotImages: String[];
+  genomeViews: String[];
+}
+
+export const PrimarySolutionPage = (props: PrimarySolutionPageProps) => {
   const [index, setIndex] = useState(0);
-  const [plots, setPlots] = useState<any>();
-  const [genomePlots, setGenomePlots] = useState<any>();
+  const [plots, setPlots] = useState<String[]>();
+  const [genomePlots, setGenomePlots] = useState<String[]>();
   const [primaryLoading, setPrimaryLoading] = useState(false);
-  const [PDF, setPDF] = useState<any>();
+  // this variable is needed for images to render on UI
+  // eslint-disable-next-line
+  const [PDF, setPDF] = useState<String>();
 
-  const { gammas, images, genomeViews } = props;
-
-  useEffect(() => {
-    if (images) {
-      let pdfs = [];
-      setPrimaryLoading(true);
-      for (let i = 0; i < images.length; i++) {
-        fetch("/pdf", {
-          method: "POST",
-          body: JSON.stringify(images[i]),
-        })
-          .then((res) => res.blob())
-          .then((blob) => {
-            let objectURL = URL.createObjectURL(blob);
-            pdfs.push(objectURL);
-          })
-          .finally(() => setPrimaryLoading(false));
-      }
-      setPlots(pdfs);
-    }
-  }, [images]);
+  const { gammas, primaryPlotImages, genomeViews } = props;
 
   useEffect(() => {
-    if (genomeViews) {
-      let graphs = [];
+    getImagesFromPaths(primaryPlotImages, setPlots, setPrimaryLoading);
+  }, [primaryPlotImages]);
 
-      for (let i = 0; i < genomeViews.length; i++) {
+  useEffect(() => {
+    getImagesFromPaths(genomeViews, setGenomePlots, setPrimaryLoading);
+  }, [genomeViews]);
+
+  const getImagesFromPaths = (
+    data: String[],
+    setValue: (value: String[]) => void,
+    setLoading: React.Dispatch<React.SetStateAction<Boolean>>
+  ) => {
+    if (data) {
+      let temp = [];
+      setLoading(true);
+      for (let i = 0; i < data.length; i++) {
         fetch("/pdf", {
           method: "POST",
-          body: JSON.stringify(genomeViews[i]),
+          body: JSON.stringify(data[i]),
         })
           .then((res) => res.blob())
           .then((blob) => {
             let object = URL.createObjectURL(blob);
             // setPDF is needed for genome view to be displayed, unsure why
             setPDF(object);
-            graphs.push(object);
-          });
+            temp.push(object);
+          })
+          .finally(() => setLoading(false));
       }
-      setGenomePlots(graphs);
+      setValue(temp);
     }
-  }, [genomeViews]);
+  };
 
   const handleInputChange = (e) => {
     setIndex(e.currentTarget.value);
@@ -84,7 +85,7 @@ export const PrimarySolutionPage = (props) => {
 
           <datalist id="tick-list">
             {gammas["data"] ? (
-              gammas["data"].map((option, key) => (
+              gammas["data"].map((option, key: Key) => (
                 <option key={key} value={option}>
                   {option}
                 </option>
@@ -93,9 +94,7 @@ export const PrimarySolutionPage = (props) => {
               <>Loading</>
             )}
           </datalist>
-
           <br />
-
           <Row>
             <Col md={4}>
               {plots &&
@@ -112,6 +111,7 @@ export const PrimarySolutionPage = (props) => {
                   />
                 ))}
             </Col>
+            {/* space between primary and genome view plots */}
             <div style={{ width: "3rem" }}></div>
             <Col>
               {genomePlots &&
@@ -132,25 +132,6 @@ export const PrimarySolutionPage = (props) => {
             </Col>
           </Row>
           <br />
-          {/* 
-          Option: place genome plots on their own row for better visibility 
-          <Row>
-            <Col>
-              {genomePlots &&
-                genomePlots.map((view, key) => (
-                  <Plot
-                    // #toolbar=0 is needed to remove built-in pdf viewer and make it look like an image
-                    src={view + "#toolbar=0"}
-                    width="100%"
-                    height="500"
-                    key={key}
-                    type="application/pdf"
-                    show={key == index}
-                    // must be "==" for images to show
-                  />
-                ))}
-            </Col>
-          </Row> */}
         </>
       )}
     </Container>

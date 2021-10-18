@@ -6,7 +6,7 @@ from extraction import (
     set_path,
     get_gamma_options,
     get_solution_name,
-    extract,
+    extract_text,
     get_alternate_solutions,
     get_gamma_data,
 )
@@ -36,16 +36,15 @@ class TestExtraction(unittest.TestCase):
 
     def test_get_solution_name(self):
         folder = str(os.getenv("TEST_DATA"))
-        self.assertEqual(get_solution_name(folder), expected_solution_filename)
+        self.assertEqual(get_solution_name(folder, "_model_fit.pdf"), expected_solution_filename)
 
     def test_extract(self):
         load_dotenv()
         path = "gammas/100/"
         folder = str(os.getenv("TEST_DATA"))
-        solution_filename = "PANX_1280_Lv_M_WG_100-PM-022_LCM2_model_fit.pdf"
 
         self.assertEqual(
-            extract(path, 0, folder, solution_filename), expected_extracted_data
+            extract_text(path, 0, folder), expected_extracted_data
         )
 
     def test_get_alternate_solutions(self):
@@ -57,14 +56,12 @@ class TestExtraction(unittest.TestCase):
 
     def test_get_gamma_data(self):
         gamma = 100
-        selected_folder = str(os.getenv("TEST_DATA"))
-        solution_filename = "PANX_1280_Lv_M_WG_100-PM-022_LCM2_model_fit.pdf"
-
+        folder = str(os.getenv("TEST_DATA"))
         self.assertTrue(
-            type(get_gamma_data(gamma, selected_folder, solution_filename) == list)
+            type(get_gamma_data(gamma, folder) == list)
         )
         self.assertEqual(
-            get_gamma_data(gamma, selected_folder, solution_filename), expected_data
+            get_gamma_data(gamma, folder), expected_data
         )
 
 

@@ -1,11 +1,10 @@
 import React, { Key } from "react";
-import ImageFadeIn from "react-image-fade-in";
 
 export const ImageGrid = (props: { data: String[] }) => {
   const { data } = props;
 
   const displayImages = (images: String[]) => {
-    let renderImages;
+    let renderImages: any;
     if (images) {
       renderImages = images.map((image: String, key: Key) => (
         <span key={key} style={{ padding: "2vw" }}>

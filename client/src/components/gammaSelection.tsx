@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Col, Spinner } from "react-bootstrap";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
 
 import { SubmitButton, Textbox, FormInputLabel } from "./gammaSelectionStyles";
 import { DropdownMenu } from "./dropDownMenu";
@@ -17,7 +17,7 @@ interface SolutionData {
   id: Number;
   cellularity: Number;
   ploidy: Number;
-  // quotes required to prevent '.' in sd.BAF from creating an error
+  // quotes required to prevent '.' in sd.BAF from throwing an error
   "sd.BAF": Number;
   path: String;
 }
@@ -31,8 +31,11 @@ export const GammaSelection = () => {
   const [options, setOptions] = useState<Number[]>([]);
   const [folders, setFolders] = useState<String[]>([]);
 
-  // state variables for images display and plot data
+  // state variables for images display and plot data; all fields of data are currently not used, but will be needed when auto-populating fields
+  // eslint-disable-next-line
   const [data, setData] = useState<Data>();
+  // this variable is needed for images to render on UI
+  // eslint-disable-next-line
   const [PDF, setPDF] = useState<String>();
   const [images, setImages] = useState<String[]>();
 
@@ -44,7 +47,7 @@ export const GammaSelection = () => {
 
   const [primaryPlots, setPrimaryPlots] = useState([]);
 
-  // fetches available data folders on page load
+  // fetches available sequenza data folders on page load
   useEffect(() => {
     setLoading(true);
     fetch("/data_folders")
@@ -69,8 +72,8 @@ export const GammaSelection = () => {
 
   // fetches plots and data every time gamma changes
   useEffect(() => {
-    // if statement needed to prevent fetching on page load when gamma is not selected
-    if (gamma !== undefined) {
+    // get data once gamma is selected
+    if (gamma) {
       getData();
     }
   }, [gamma]);
@@ -87,7 +90,7 @@ export const GammaSelection = () => {
     }
   }, [selectedFolder]);
 
-  // fetches plots and data
+  // fetches plots and data for a selected gamma
   const getData = () => {
     let pdfs = [];
     let gamma_data;
@@ -139,6 +142,7 @@ export const GammaSelection = () => {
       cellularity: cellularity_submit,
       ploidy: ploidy_submit,
     });
+    // after submission to db, show this alert
     toast.success("Submitted to database", {
       position: "top-right",
       autoClose: 3000,
@@ -150,10 +154,18 @@ export const GammaSelection = () => {
 
   return (
     <>
-      <Container style={{ paddingTop: "2vh" }}>
-        <p>
-          Select a folder to get started, then choose a gamma.{" "}
-          {images && <>The first plot is the primary solution.</>}
+      <Container
+        style={{ paddingRight: "3vw", paddingLeft: "3vw", paddingTop: "2vh" }}
+      >
+        <p style={{ fontSize: "16px" }}>
+          Select a folder to get started.{" "}
+          {selectedFolder && (
+            <>
+              Use the slider to see primary solutions for different gammas.
+              Choose a value from the Gamma dropdown to see the all solutions
+              for that gamma.
+            </>
+          )}
         </p>
       </Container>
       <Container style={{ paddingRight: "3vw", paddingLeft: "3vw" }}>
@@ -221,7 +233,7 @@ export const GammaSelection = () => {
       {selectedFolder && (
         <PrimarySolutionPage
           gammas={options}
-          images={primaryPlots["model_fit"]}
+          primaryPlotImages={primaryPlots["model_fit"]}
           genomeViews={primaryPlots["genome_view"]}
         />
       )}

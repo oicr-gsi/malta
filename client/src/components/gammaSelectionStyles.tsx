@@ -1,4 +1,4 @@
-import { Button, Col, Spinner } from "react-bootstrap";
+import { Col } from "react-bootstrap";
 import styled from "styled-components";
 import { Theme } from "../globalStyles";
 

@@ -62,16 +62,19 @@ def send_primary_data(folder_name):
         pass
 
 
-@app.route("/cleanup")
+@app.route("/cleanup", methods=["POST"])
 def cleanup(): 
-    extracted_path = os.path.join(os.getenv("MALTA_DATA_FOLDER"), "gammas")
-    try:
-        shutil.rmtree(extracted_path)
-        print("Successfully removed folder")
-    except OSError as e:
-        print(f"Failed to remove extracted folder: {e.filename} - {e.strerror}")
+    if request.method == "POST":
+        extracted_path = os.path.join(os.getenv("MALTA_DATA_FOLDER"), "gammas")
+        try:
+            shutil.rmtree(extracted_path)
+            print("Successfully removed folder")
+        except OSError as e:
+            print(f"Failed to remove extracted folder: {e.filename} - {e.strerror}")
     
-    return "cleanup complete"
+        return "cleanup complete"
+    else :
+        pass
 
 if __name__ == "__main__":
     app.run(debug=True)

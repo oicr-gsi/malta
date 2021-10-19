@@ -15,7 +15,10 @@ const App = () => {
     };
   }, []);
 
-  const handleUnload = () => fetch("/cleanup").then((res) => console.log(res));
+  const handleUnload = () =>
+    fetch("/cleanup", {
+      method: "POST",
+    }).then((res) => console.log(res));
 
   return (
     <>

@@ -8,19 +8,7 @@ import { SubmitButton, Textbox, FormInputLabel } from "./gammaSelectionStyles";
 import { DropdownMenu } from "./dropDownMenu";
 import { ImageGrid } from "./imageGrid";
 import { PrimarySolutionPage } from "./primarySolutionPage";
-
-interface Data {
-  gamma: SolutionData[];
-}
-
-interface SolutionData {
-  id: Number;
-  cellularity: Number;
-  ploidy: Number;
-  // quotes required to prevent '.' in sd.BAF from throwing an error
-  "sd.BAF": Number;
-  path: String;
-}
+import { Data, Primary } from "../interfaces";
 
 export const GammaSelection = () => {
   // state variables for async operations
@@ -45,7 +33,7 @@ export const GammaSelection = () => {
   const [cellularity, setCellularity] = useState<String>();
   const [ploidy, setPloidy] = useState<String>();
 
-  const [primaryPlots, setPrimaryPlots] = useState<String[]>([]);
+  const [primaryPlots, setPrimaryPlots] = useState<Primary>();
 
   // fetches available sequenza data folders on page load
   useEffect(() => {
@@ -78,6 +66,7 @@ export const GammaSelection = () => {
     }
   }, [gamma]);
 
+  // fetches model_fit and genome_view plots for all primary solutions
   useEffect(() => {
     if (selectedFolder) {
       fetch(`/primary/${selectedFolder}`, {
@@ -157,7 +146,7 @@ export const GammaSelection = () => {
       <Container
         style={{ paddingRight: "3vw", paddingLeft: "3vw", paddingTop: "2vh" }}
       >
-        <p style={{ fontSize: "16px" }}>
+        <p>
           Select a folder to get started.{" "}
           {selectedFolder && (
             <>
@@ -230,12 +219,14 @@ export const GammaSelection = () => {
         </Row> */}
       </Container>
 
-      {selectedFolder && (
+      {selectedFolder && primaryPlots ? (
         <PrimarySolutionPage
           gammas={gammaOptions}
           primaryPlotImagePaths={primaryPlots["model_fit"]}
           genomeViewsPaths={primaryPlots["genome_view"]}
         />
+      ) : (
+        <></>
       )}
       <br />
       <Container style={{ paddingTop: "2vh" }}>

@@ -229,7 +229,7 @@ def get_primary_solutions_plots(selected_folder, filename):
     gammas = get_gamma_options(data_path)
 
     for gamma in gammas:
-        data.append(extract_file(set_path(gamma), selected_folder, filename))
+        data.append({"file": extract_file(set_path(gamma), selected_folder, filename), "gamma": gamma})
     
     return data
 

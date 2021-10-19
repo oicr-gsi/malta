@@ -3,11 +3,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import styled from "styled-components";
 import { Container, Spinner, Row, Col } from "react-bootstrap";
 import { FormInputLabel } from "./gammaSelectionStyles";
+import { PrimaryData } from "../interfaces";
 
 interface PrimarySolutionPageProps {
   gammas: Number[];
-  primaryPlotImagePaths: String[];
-  genomeViewsPaths: String[];
+  primaryPlotImagePaths: PrimaryData[];
+  genomeViewsPaths: PrimaryData[];
 }
 
 const Plot = styled.embed`
@@ -16,8 +17,8 @@ const Plot = styled.embed`
 
 export const PrimarySolutionPage = (props: PrimarySolutionPageProps) => {
   const [index, setIndex] = useState(0);
-  const [plots, setPlots] = useState<String[]>();
-  const [genomePlots, setGenomePlots] = useState<String[]>();
+  const [primaryPlots, setPrimaryPlots] = useState<PrimaryData[]>();
+  const [genomePlots, setGenomePlots] = useState<PrimaryData[]>();
   const [primaryLoading, setPrimaryLoading] = useState(false);
   // PDF variable is needed for images to render on UI
   // eslint-disable-next-line
@@ -26,7 +27,11 @@ export const PrimarySolutionPage = (props: PrimarySolutionPageProps) => {
   const { gammas, primaryPlotImagePaths, genomeViewsPaths } = props;
 
   useEffect(() => {
-    getImagesFromPaths(primaryPlotImagePaths, setPlots, setPrimaryLoading);
+    getImagesFromPaths(
+      primaryPlotImagePaths,
+      setPrimaryPlots,
+      setPrimaryLoading
+    );
   }, [primaryPlotImagePaths]);
 
   useEffect(() => {
@@ -34,24 +39,24 @@ export const PrimarySolutionPage = (props: PrimarySolutionPageProps) => {
   }, [genomeViewsPaths]);
 
   const getImagesFromPaths = (
-    data: String[],
-    setValue: (value: String[]) => void,
+    data: PrimaryData[],
+    setValue: (value: PrimaryData[]) => void,
     setLoading: React.Dispatch<React.SetStateAction<Boolean>>
   ) => {
     if (data) {
-      let temp = [];
+      let temp = [...data];
       setLoading(true);
       for (let i = 0; i < data.length; i++) {
         fetch("/pdf", {
           method: "POST",
-          body: JSON.stringify(data[i]),
+          body: JSON.stringify(data[i]["file"]),
         })
           .then((res) => res.blob())
           .then((blob) => {
             let object = URL.createObjectURL(blob);
             // setPDF is needed for genome view to be displayed, unsure why
             setPDF(object);
-            temp.push(object);
+            temp[i]["file"] = object;
           })
           .finally(() => setLoading(false));
       }
@@ -98,16 +103,17 @@ export const PrimarySolutionPage = (props: PrimarySolutionPageProps) => {
           <br />
           <Row>
             <Col md={4}>
-              {plots &&
-                plots.map((plot, key) => (
+              {primaryPlots &&
+                primaryPlots.map((plot, key) => (
                   <Plot
                     // #toolbar=0 is needed to remove built-in pdf viewer and make it look like an image
-                    src={plot + "#toolbar=0"}
+                    src={plot["file"] + "#toolbar=0"}
                     width="400"
                     height="400"
                     key={key}
                     type="application/pdf"
-                    show={key == index}
+                    show={plot["gamma"] == gammas["data"][index]}
+                    // gamma stored in plot data must equal gamma chosen by slider
                     // must be "==" for images to show
                   />
                 ))}
@@ -116,16 +122,17 @@ export const PrimarySolutionPage = (props: PrimarySolutionPageProps) => {
             <div style={{ width: "3rem" }}></div>
             <Col>
               {genomePlots &&
-                genomePlots.map((view, key) => (
+                genomePlots.map((plot, key) => (
                   <Plot
                     // #toolbar=0 is needed to remove built-in pdf viewer and make it look like an image
-                    src={view + "#toolbar=0"}
+                    src={plot["file"] + "#toolbar=0"}
                     width="100%"
                     height="400"
                     key={key}
                     type="application/pdf"
-                    show={key == index}
+                    show={plot["gamma"] == gammas["data"][index]}
                     // must be "==" for images to show, values must match - typecheck is not necessary
+                    // gamma stored in plot data must equal gamma chosen by slider
                   />
                 ))}
             </Col>

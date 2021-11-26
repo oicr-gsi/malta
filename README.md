@@ -21,7 +21,8 @@ A key step in CGI report generation is choosing from the solutions offered by th
 
 ## Inputs
 
-There are a few environment variables stored in the `.env` file.
+There are a few environment variables stored in the `.env` file, in the root directory (needs to be created by developer).
+
 The following are ordered by the likelihood that they need to be configured by the developer.
 
 - MALTA_DATA_FOLDER: Path to folder that contains Sequenza zipfiles
@@ -47,6 +48,24 @@ To run the React front-end:
 `npm start`
 
 The app should be visible on `http://localhost:3000/`.
+
+## Unit tests
+
+To run the python unit tests:
+
+`cd flask-server`
+
+and then run
+
+`python test_extraction.py` or `python3 test_extraction.py` depending on your OS.
+
+To unit test the flask server:
+
+`cd flask-server`
+
+and then run
+
+`python test_server.py` or `python3 test_server.py` depending on your OS.
 
 ## Future work
 

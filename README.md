@@ -30,13 +30,13 @@ The following are ordered by the likelihood that they need to be configured by t
 --------|---- | ----------- |
 MALTA_DATA_FOLDER | `String` | Path to folder that contains Sequenza zipfiles
 DROPDOWN_COUNT | `Integer` | Number of folders available in "Select folder" dropdown
-STUDIES | `String`, (later on `List[str]`) | Desired studies. For now, there is only one: `PASS01`
+STUDIES | `String`, (later on `List[str]`) | Desired studies. For now, only `PASS01`
 LATEST_PROVENANCE | String | Path to latest provenance `.tsv.gz` file
 SECRET_KEY | `String` | Key for Flask app to use `session`, required in order to store the selected folder's name across HTTP requests
 
 ### Running locally
 
-There are two components that need to be run, the Flask server and React front-end. To run the Flask app, change directory into /flask-server and run the python file:
+There are two components that need to be run, the Flask server and React front-end. To run the Flask app, change directory into flask-server/ and run server.py:
 
 `cd flask-server`
 
@@ -52,23 +52,35 @@ To run the React front-end:
 
 The app should be visible on `http://localhost:3000/`.
 
-### Unit tests
+## Unit tests
 
-To run the python unit tests:
+### On HPC Cluster:
 
-`cd flask-server`
+- Load `module load python/3.9`
 
-and then run
+- Clone the repository and `cd malta`
 
-`python test_extraction.py` or `python3 test_extraction.py` depending on your OS.
+- Create a virtual environment: `python3 -m venv <environment name>`
 
-To unit test the flask server:
+- Activate the virtual environment: `source <environment name>/bin/activate`
 
-`cd flask-server`
+- Run the setup script: `python3 setup.py install`
 
-and then run
+- `cd flask-server` and run `python3 test_extraction.py`
 
-`python test_server.py` or `python3 test_server.py` depending on your OS.
+<br />
+
+### On local machine:
+
+- `cd flask-server`
+
+- run `python test_extraction.py` or `python3 test_extraction.py` depending on your OS.
+
+To test the flask server:
+
+- `cd flask-server`
+
+- run `python test_server.py` or `python3 test_server.py` depending on your OS.
 
 ## Future work
 

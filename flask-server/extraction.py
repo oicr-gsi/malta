@@ -264,14 +264,10 @@ def extract_file(path, selected_folder, filename):
     return full_path
 
 
-# #testing code
-# BASE_FILEPATH = os.path.join(os.getenv("MALTA_DATA_FOLDER"), str(os.getenv("TEST_DATA")))
-# BASE_FILEPATH = os.path.join(BASE_FILEPATH, "gammas")
+# if __name__ == "__main__":
+#     load_dotenv()
+#     my_data = get_primary_solutions_plots(str(os.getenv("TEST_DATA")), "_model_fit.pdf")
+#     print(my_data, type(my_data[0]))
 
-# load_dotenv()
-# my_data = get_primary_solutions_plots(str(os.getenv("TEST_DATA")), "_model_fit.pdf")
-# print(my_data, type(my_data[0]))
-
-# load_dotenv()
-# my_data = extract_text("gammas/100/", 0, os.getenv("TEST_DATA"))
-# print(my_data)
+#     my_data = extract_text("gammas/100/", 0, os.getenv("TEST_DATA"))
+#     print(my_data)

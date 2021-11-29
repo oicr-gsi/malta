@@ -60,6 +60,8 @@ The app should be visible on `http://localhost:3000/`.
 
 - Clone the repository and `cd malta`
 
+- Create a `.env` file and fill it with the required inputs from above. Ensure that it is in the root directory, _not_ in `flask-server/`
+
 - Create a virtual environment: `python3 -m venv <environment name>`
 
 - Activate the virtual environment: `source <environment name>/bin/activate`

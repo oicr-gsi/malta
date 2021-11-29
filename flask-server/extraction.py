@@ -14,9 +14,10 @@ def get_data_folders():
         List of Strings, names of zip files available in specified directory
     """
     load_dotenv()
-    return [
+    zips = [
         (f.name) for f in os.scandir(os.getenv("MALTA_DATA_FOLDER")) if is_zipfile(f)
     ]
+    return sorted(zips)
 
 
 def get_gamma_options(path):

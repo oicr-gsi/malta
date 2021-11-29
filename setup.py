@@ -19,7 +19,7 @@ setup(
     ],
     packages=find_packages(where=package_root),
     package_dir={"": package_root},
-    install_requires=["pandas", "dotenv", "flask", "PyPDF2"],
+    install_requires=["pandas", "python-dotenv", "flask", "PyPDF2"],
     python_requires=">=3.9",
     author="Vivek Alamuri",
     author_email="valamuri [at] oicr [dot] on [dot] ca",

@@ -26,12 +26,13 @@ A key step in CGI report generation is choosing from the solutions offered by th
 There are a few environment variables stored in an `.env` file, in the root directory (needs to be created by developer).
 
 The following are ordered by the likelihood that they need to be configured by the developer.
-
-- MALTA_DATA_FOLDER: Path to folder that contains Sequenza zipfiles
-- DROPDOWN_COUNT: Number of folders available in "Select folder" dropdown
-- STUDIES: Studies to filter file provenance file by. For now, there is only one: `PASS01`
-- LATEST_PROVENANCE: Path to latest provenance `.tsv.gz` file
-- SECRET_KEY: Key for Flask app to use `session`, which is needed to store the selected folder's name across HTTP requests
+| Field | Type| Description |
+--------|---- | ----------- |
+MALTA_DATA_FOLDER | `String` | Path to folder that contains Sequenza zipfiles
+DROPDOWN_COUNT | `Integer` | Number of folders available in "Select folder" dropdown
+STUDIES | `String`, (later on `List[str]`) | Desired studies. For now, there is only one: `PASS01`
+LATEST_PROVENANCE | String | Path to latest provenance `.tsv.gz` file
+SECRET_KEY | `String` | Key for Flask app to use `session`, required in order to store the selected folder's name across HTTP requests
 
 ### Running locally
 

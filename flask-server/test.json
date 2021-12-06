@@ -1,0 +1,114 @@
+[
+  {
+    "id": 0,
+    "path": "../../../Desktop/Work/Malta_data/gammas/50/PANX_1280_Lv_M_WG_100-PM-022_LCM2_model_fit.pdf",
+    "cellularity": 0.39,
+    "ploidy": 1.9,
+    "sd.BAF": 0.07,
+    "gamma": 50
+  },
+  {
+    "id": 0,
+    "path": "../../../Desktop/Work/Malta_data/gammas/100/PANX_1280_Lv_M_WG_100-PM-022_LCM2_model_fit.pdf",
+    "cellularity": 0.61,
+    "ploidy": 2.0,
+    "sd.BAF": 0.07,
+    "gamma": 100
+  },
+  {
+    "id": 0,
+    "path": "../../../Desktop/Work/Malta_data/gammas/200/PANX_1280_Lv_M_WG_100-PM-022_LCM2_model_fit.pdf",
+    "cellularity": 0.45,
+    "ploidy": 3.9,
+    "sd.BAF": 0.07,
+    "gamma": 200
+  },
+  {
+    "id": 0,
+    "path": "../../../Desktop/Work/Malta_data/gammas/300/PANX_1280_Lv_M_WG_100-PM-022_LCM2_model_fit.pdf",
+    "cellularity": 0.45,
+    "ploidy": 3.9,
+    "sd.BAF": 0.07,
+    "gamma": 300
+  },
+  {
+    "id": 0,
+    "path": "../../../Desktop/Work/Malta_data/gammas/400/PANX_1280_Lv_M_WG_100-PM-022_LCM2_model_fit.pdf",
+    "cellularity": 0.44,
+    "ploidy": 3.9,
+    "sd.BAF": 0.07,
+    "gamma": 400
+  },
+  {
+    "id": 0,
+    "path": "../../../Desktop/Work/Malta_data/gammas/500/PANX_1280_Lv_M_WG_100-PM-022_LCM2_model_fit.pdf",
+    "cellularity": 0.44,
+    "ploidy": 3.9,
+    "sd.BAF": 0.07,
+    "gamma": 500
+  },
+  {
+    "id": 0,
+    "path": "../../../Desktop/Work/Malta_data/gammas/600/PANX_1280_Lv_M_WG_100-PM-022_LCM2_model_fit.pdf",
+    "cellularity": 0.44,
+    "ploidy": 3.9,
+    "sd.BAF": 0.07,
+    "gamma": 600
+  },
+  {
+    "id": 0,
+    "path": "../../../Desktop/Work/Malta_data/gammas/700/PANX_1280_Lv_M_WG_100-PM-022_LCM2_model_fit.pdf",
+    "cellularity": 0.44,
+    "ploidy": 3.9,
+    "sd.BAF": 0.07,
+    "gamma": 700
+  },
+  {
+    "id": 0,
+    "path": "../../../Desktop/Work/Malta_data/gammas/800/PANX_1280_Lv_M_WG_100-PM-022_LCM2_model_fit.pdf",
+    "cellularity": 0.44,
+    "ploidy": 3.9,
+    "sd.BAF": 0.07,
+    "gamma": 800
+  },
+  {
+    "id": 0,
+    "path": "../../../Desktop/Work/Malta_data/gammas/900/PANX_1280_Lv_M_WG_100-PM-022_LCM2_model_fit.pdf",
+    "cellularity": 0.44,
+    "ploidy": 3.9,
+    "sd.BAF": 0.07,
+    "gamma": 900
+  },
+  {
+    "id": 0,
+    "path": "../../../Desktop/Work/Malta_data/gammas/1000/PANX_1280_Lv_M_WG_100-PM-022_LCM2_model_fit.pdf",
+    "cellularity": 0.44,
+    "ploidy": 3.9,
+    "sd.BAF": 0.07,
+    "gamma": 1000
+  },
+  {
+    "id": 0,
+    "path": "../../../Desktop/Work/Malta_data/gammas/1250/PANX_1280_Lv_M_WG_100-PM-022_LCM2_model_fit.pdf",
+    "cellularity": 0.44,
+    "ploidy": 3.9,
+    "sd.BAF": 0.07,
+    "gamma": 1250
+  },
+  {
+    "id": 0,
+    "path": "../../../Desktop/Work/Malta_data/gammas/1500/PANX_1280_Lv_M_WG_100-PM-022_LCM2_model_fit.pdf",
+    "cellularity": 0.44,
+    "ploidy": 3.9,
+    "sd.BAF": 0.07,
+    "gamma": 1500
+  },
+  {
+    "id": 0,
+    "path": "../../../Desktop/Work/Malta_data/gammas/2000/PANX_1280_Lv_M_WG_100-PM-022_LCM2_model_fit.pdf",
+    "cellularity": 0.43,
+    "ploidy": 3.9,
+    "sd.BAF": 0.08,
+    "gamma": 2000
+  }
+]

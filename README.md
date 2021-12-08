@@ -36,7 +36,7 @@ MALTA_LATEST_PROVENANCE | String | Path to latest provenance `.tsv.gz` file
 MALTA_SECRET_KEY | `String` | Key for Flask app to use `session`, required in order to store the selected folder's name across HTTP requests
 MALTA_TEST_DATA | `String` | Name of zip used for unit tests: Currently PANX_1280_Lv_M_100-PM-022_LCM2.results.zip
 
-Example of a completed `.env` file can be found [here](/example/example.env)
+Example of a completed `.env` file for Malta can be found [here](/example/example.env).
 
 ### Running locally
 

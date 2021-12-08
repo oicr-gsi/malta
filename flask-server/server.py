@@ -57,14 +57,10 @@ def send_primary_data(folder_name):
         session["selected_data_folder"] = folder_name
         output_dir = str(os.getenv("MALTA_OUTPUT_FOLDER"))
         model_fit_data = get_primary_solutions_plots(
-            folder_name,
-            "_model_fit.pdf",
-            output_dir
+            folder_name, "_model_fit.pdf", output_dir
         )
         genome_view_data = get_primary_solutions_plots(
-            folder_name,
-            "_genome_view.pdf",
-            output_dir
+            folder_name, "_genome_view.pdf", output_dir
         )
 
         return {"model_fit": model_fit_data, "genome_view": genome_view_data}
@@ -78,9 +74,9 @@ def cleanup():
         extracted_path = os.path.join(str(os.getenv("MALTA_OUTPUT_FOLDER")), "gammas")
         try:
             shutil.rmtree(extracted_path)
-            print("Successfully removed folder")
+            print("Clean up successful")
         except OSError as e:
-            print(f"Failed to remove extracted folder: {e.filename} - {e.strerror}")
+            print(f"Clean up failed: {e.filename} - {e.strerror}")
 
         return "cleanup complete"
     else:

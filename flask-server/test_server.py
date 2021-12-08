@@ -1,3 +1,4 @@
+#! /usr/bin/env python3
 from server import app
 import unittest
 

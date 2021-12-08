@@ -23,16 +23,19 @@ A key step in CGI report generation is choosing from the solutions offered by th
 
 ### Inputs
 
-There are a few environment variables stored in an `.env` file, in the root directory (needs to be created by developer).
+There are a few environment variables stored in an `.env` file, in the root directory (needs to be created by developer). The `.env` file ("dotenv") is a simple text format used to define variables that are needed for the application's environment. Documentation for dotenv files can be found [here](https://hexdocs.pm/dotenvy/dotenv-file-format.html).
 
 The following are ordered by the likelihood that they need to be configured by the developer.
 | Field | Type| Description |
 --------|---- | ----------- |
 MALTA_DATA_FOLDER | `String` | Path to folder that contains Sequenza zipfiles
-DROPDOWN_COUNT | `Integer` | Number of folders available in "Select folder" dropdown
-STUDIES | `String`, (later on `List[str]`) | Desired studies. For now, only `PASS01`
-LATEST_PROVENANCE | String | Path to latest provenance `.tsv.gz` file
-SECRET_KEY | `String` | Key for Flask app to use `session`, required in order to store the selected folder's name across HTTP requests
+MALTA_DROPDOWN_COUNT | `Integer` | Number of folders available in "Select folder" dropdown
+MALTA_STUDIES | `String`, (later on `List[str]`) | Desired studies. For now, only `PASS01`
+MALTA_LATEST_PROVENANCE | String | Path to latest provenance `.tsv.gz` file
+MALTA_SECRET_KEY | `String` | Key for Flask app to use `session`, required in order to store the selected folder's name across HTTP requests
+MALTA_TEST_DATA | `String` | Name of zip used for unit tests: Currently PANX_1280_Lv_M_100-PM-022_LCM2.results.zip
+
+Example of a completed `.env` file can be found [here](/example/example.env)
 
 ### Running locally
 
@@ -48,6 +51,8 @@ To run the React front-end:
 
 `cd client`
 
+`npm install` (only the first time for setting up). This installs the necessary modules and dependencies for the React app.
+
 `npm start`
 
 The app should be visible on `http://localhost:3000/`.
@@ -62,9 +67,13 @@ The app should be visible on `http://localhost:3000/`.
 
 - Create a `.env` file and fill it with the required inputs from above. Ensure that it is in the root directory.
 
-- Create a virtual environment: `python3 -m venv <environment name>`
+- pip install --prefix $INSTALL_DIR .
 
-- Activate the virtual environment: `source <environment name>/bin/activate`
+- Then update `PATH` and `PYTHONPATH` accordingly:
+
+  - export` PATH=$INSTALL_DIR/bin:$PATH`
+
+  - export `PYTHONPATH=$INSTALL_DIR/lib/$PYTHON_VERSION/site-packages:$PYTHONPATH`, where eg.` $PYTHON_VERSION=python3.8`
 
 - Run the setup script: `python3 setup.py install`
 
@@ -87,6 +96,10 @@ To test the flask server:
 ## Future work
 
 After Sequenza parameter selection has been implemented, Malta can be built out to provide an interface for other reporting parameters, and to store Djerba configuration files in its database.
+
+### Query Provenance script
+
+`query_provenance.py`
 
 ## Copyright and License
 

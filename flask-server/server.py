@@ -1,3 +1,4 @@
+#! /usr/bin/env python3
 import os
 from flask import Flask, send_file, request, session
 from extraction import (
@@ -9,7 +10,7 @@ from extraction import (
 import shutil
 
 app = Flask(__name__)
-app.secret_key = os.getenv("SECRET_KEY")
+app.secret_key = os.getenv("MALTA_SECRET_KEY")
 
 
 @app.route("/data_folders")
@@ -53,17 +54,17 @@ def send_pdf():
 def send_primary_data(folder_name):
     if request.method == "POST":
         session["selected_data_folder"] = folder_name
-        
+
         model_fit_data = get_primary_solutions_plots(folder_name, "_model_fit.pdf")
         genome_view_data = get_primary_solutions_plots(folder_name, "_genome_view.pdf")
- 
+
         return {"model_fit": model_fit_data, "genome_view": genome_view_data}
     else:
         pass
 
 
 @app.route("/cleanup", methods=["POST"])
-def cleanup(): 
+def cleanup():
     if request.method == "POST":
         extracted_path = os.path.join(os.getenv("MALTA_DATA_FOLDER"), "gammas")
         try:
@@ -71,10 +72,11 @@ def cleanup():
             print("Successfully removed folder")
         except OSError as e:
             print(f"Failed to remove extracted folder: {e.filename} - {e.strerror}")
-    
+
         return "cleanup complete"
-    else :
+    else:
         pass
+
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -180,6 +180,9 @@ export const GammaSelection = () => {
           )}
         </Row>
 
+        {/*  The following block of commented code is for the two form fields and submit button 
+        that are needed once CouchDB is set up*/}
+
         {/* <Row>
           <Col>
             <FormInputLabel htmlFor="cellularity">Cellularity</FormInputLabel>

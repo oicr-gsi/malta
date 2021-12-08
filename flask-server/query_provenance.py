@@ -1,18 +1,30 @@
+#! /usr/bin/env python3
 import os
 import pandas as pd
 from dotenv import load_dotenv
 
 
 def main():
+    """
+    Script to parse file provenance, find latest zip files,
+    and create a folder with symlinks to those zips.
+
+    Will need to run this script with a cron job or Shesmu olive
+    periodically to provide Malta with latest/relevant cases.
+    """
     load_dotenv()
 
     # will have to do some manipulation when multiple studies are in env file.
     # Ex. separate study names by "|" in env file and split by "|" here to create list of studies
     STUDIES = (
-        os.getenv("STUDIES").split() if os.getenv("STUDIES") != None else ["PASS01"]
+        os.getenv("MALTA_STUDIES").split()
+        if os.getenv("MALTA_STUDIES") != None
+        else ["PASS01"]
     )
     dropdown_count = (
-        int(os.getenv("DROPDOWN_COUNT")) if os.getenv("DROPDOWN_COUNT") != None else 15
+        int(os.getenv("MALTA_DROPDOWN_COUNT"))
+        if os.getenv("MALTA_DROPDOWN_COUNT") != None
+        else 15
     )
     provenance_file = str(os.getenv("LATEST_PROVENANCE"))
 

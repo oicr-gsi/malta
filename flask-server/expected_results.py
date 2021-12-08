@@ -1,4 +1,5 @@
 import os
+from tempfile import TemporaryDirectory
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -34,7 +35,7 @@ expected_solution_filename = "PANX_1280_Lv_M_WG_100-PM-022_LCM2_model_fit.pdf"
 expected_extracted_text_data = {
     "id": 0,
     "path": os.path.join(
-        os.getenv("MALTA_DATA_FOLDER"),
+        os.getenv("MALTA_OUTPUT_FOLDER"),
         "gammas/100/PANX_1280_Lv_M_WG_100-PM-022_LCM2_model_fit.pdf",
     ),
     "cellularity": 0.61,
@@ -48,7 +49,7 @@ expected_data = [
     {
         "id": 0,
         "path": os.path.join(
-            os.getenv("MALTA_DATA_FOLDER"),
+            os.getenv("MALTA_OUTPUT_FOLDER"),
             "gammas/100/PANX_1280_Lv_M_WG_100-PM-022_LCM2_model_fit.pdf",
         ),
         "cellularity": 0.61,
@@ -58,7 +59,7 @@ expected_data = [
     {
         "id": 1,
         "path": os.path.join(
-            os.getenv("MALTA_DATA_FOLDER"),
+            os.getenv("MALTA_OUTPUT_FOLDER"),
             "gammas/100/sol3_0.3/PANX_1280_Lv_M_WG_100-PM-022_LCM2_model_fit.pdf",
         ),
         "cellularity": 0.3,
@@ -68,7 +69,7 @@ expected_data = [
     {
         "id": 2,
         "path": os.path.join(
-            os.getenv("MALTA_DATA_FOLDER"),
+            os.getenv("MALTA_OUTPUT_FOLDER"),
             "gammas/100/sol2_0.44/PANX_1280_Lv_M_WG_100-PM-022_LCM2_model_fit.pdf",
         ),
         "cellularity": 0.44,

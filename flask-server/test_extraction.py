@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 import os
 import unittest
+from tempfile import TemporaryDirectory
 from dotenv import load_dotenv
 from extraction import (
     get_data_folders,
@@ -20,8 +21,13 @@ from expected_results import (
     expected_data,
 )
 
+# from expected_results import ExpectedResults
+
 
 class TestExtraction(unittest.TestCase):
+    # def __init__(self):
+    #     self.exp_res = ExpectedResults()
+
     def test_get_data_folders(self):
         self.assertEqual(get_data_folders(), expected_folders)
 
@@ -47,8 +53,14 @@ class TestExtraction(unittest.TestCase):
         load_dotenv()
         path = "gammas/100/"
         folder = os.getenv("MALTA_TEST_DATA")
+        with TemporaryDirectory(prefix="malta_temp_output_") as tmpdir:
+            # compare dicts without path attribute as tmpdir path is always different,
+            # always fails this test if path is also checked
+            actual = extract_text(path, 0, folder, tmpdir)
+            del actual["path"]
+            del expected_extracted_text_data["path"]
 
-        self.assertEqual(extract_text(path, 0, folder), expected_extracted_text_data)
+            self.assertEqual(actual, expected_extracted_text_data)
 
     def test_get_alternate_solutions(self):
         load_dotenv()
@@ -60,8 +72,17 @@ class TestExtraction(unittest.TestCase):
     def test_get_gamma_data(self):
         gamma = 100
         folder = str(os.getenv("MALTA_TEST_DATA"))
-        self.assertTrue(type(get_gamma_data(gamma, folder) == list))
-        self.assertEqual(get_gamma_data(gamma, folder), expected_data)
+
+        with TemporaryDirectory(prefix="malta_temp_output_") as tmpdir:
+            # compare dicts without path attribute as tmpdir path is always different,
+            # always fails this test if path is also checked
+            actual = get_gamma_data(gamma, folder, tmpdir)
+            for d in actual:
+                del d["path"]
+            for e in expected_data:
+                del e["path"]
+            self.assertTrue(type(get_gamma_data(gamma, folder, tmpdir) == list))
+            self.assertEqual(actual, expected_data)
 
 
 if __name__ == "__main__":

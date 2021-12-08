@@ -16,7 +16,7 @@ const App = () => {
   }, []);
 
   const handleUnload = () =>
-    fetch("/cleanup", {
+    fetch("/api/cleanup", {
       method: "POST",
     }).then((res) => console.log(res));
 

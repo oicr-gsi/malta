@@ -38,7 +38,7 @@ export const GammaSelection = () => {
   // fetches available sequenza data folders on page load
   useEffect(() => {
     setLoading(true);
-    fetch("/data_folders")
+    fetch("/api/data_folders")
       .then((res) => res.json())
       .then((res) => {
         setFolders(res);
@@ -50,7 +50,7 @@ export const GammaSelection = () => {
   useEffect(() => {
     // if statement needed to prevent fetching on page load when folder is not selected
     if (selectedFolder) {
-      fetch(`/selected_folder/${selectedFolder}`, {
+      fetch(`/api/selected_folder/${selectedFolder}`, {
         method: "POST",
       })
         .then((res) => res.json())
@@ -69,7 +69,7 @@ export const GammaSelection = () => {
   // fetches model_fit and genome_view plots for all primary solutions
   useEffect(() => {
     if (selectedFolder) {
-      fetch(`/primary/${selectedFolder}`, {
+      fetch(`/api/primary/${selectedFolder}`, {
         method: "POST",
       })
         .then((res) => res.json())
@@ -85,7 +85,7 @@ export const GammaSelection = () => {
     let gamma_data;
 
     setLoading(true);
-    fetch(`/data/${gamma}`, {
+    fetch(`/api/data/${gamma}`, {
       method: "POST",
     })
       .then((res) => res.json())
@@ -93,7 +93,7 @@ export const GammaSelection = () => {
         gamma_data = res;
         // iterating over each solution to fetch its plot
         for (let i = 0; i < gamma_data[`${gamma}`].length; i++) {
-          fetch("/pdf", {
+          fetch("/api/pdf", {
             method: "POST",
             body: JSON.stringify(gamma_data[`${gamma}`][i]["path"]),
           })

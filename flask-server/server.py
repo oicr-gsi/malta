@@ -13,12 +13,12 @@ app = Flask(__name__)
 app.secret_key = os.getenv("MALTA_SECRET_KEY")
 
 
-@app.route("/data_folders")
+@app.route("/api/data_folders")
 def data_options():
     return {"data": get_data_folders()}
 
 
-@app.route("/selected_folder/<string:folder_name>", methods=["POST"])
+@app.route("/api/selected_folder/<string:folder_name>", methods=["POST"])
 def selected_folder(folder_name):
     if request.method == "POST":
         session["selected_data_folder"] = folder_name
@@ -30,16 +30,17 @@ def gamma_options(folder_name):
     return {"data": get_gamma_options(data_path)}
 
 
-@app.route("/data/<int:gamma>", methods=["POST"])
+@app.route("/api/data/<int:gamma>", methods=["POST"])
 def data(gamma):
     if request.method == "POST":
         # print("gamma from front end", gamma)
         selected_folder = session["selected_data_folder"]
-        data = get_gamma_data(gamma, selected_folder)
+        output_dir = str(os.getenv("MALTA_OUTPUT_FOLDER"))
+        data = get_gamma_data(gamma, selected_folder, output_dir)
         return {gamma: data}
 
 
-@app.route("/pdf", methods=["POST"])
+@app.route("/api/pdf", methods=["POST"])
 def send_pdf():
     if request.method == "POST":
         path = request.get_json(force=True)
@@ -50,7 +51,7 @@ def send_pdf():
         pass
 
 
-@app.route("/primary/<string:folder_name>", methods=["POST"])
+@app.route("/api/primary/<string:folder_name>", methods=["POST"])
 def send_primary_data(folder_name):
     if request.method == "POST":
         session["selected_data_folder"] = folder_name
@@ -63,10 +64,10 @@ def send_primary_data(folder_name):
         pass
 
 
-@app.route("/cleanup", methods=["POST"])
+@app.route("/api/cleanup", methods=["POST"])
 def cleanup():
     if request.method == "POST":
-        extracted_path = os.path.join(os.getenv("MALTA_DATA_FOLDER"), "gammas")
+        extracted_path = os.path.join(str(os.getenv("MALTA_OUTPUT_FOLDER")), "gammas")
         try:
             shutil.rmtree(extracted_path)
             print("Successfully removed folder")

@@ -47,7 +47,7 @@ export const PrimarySolutionPage = (props: PrimarySolutionPageProps) => {
       let temp = [...data];
       setLoading(true);
       for (let i = 0; i < data.length; i++) {
-        fetch("/pdf", {
+        fetch("/api/pdf", {
           method: "POST",
           body: JSON.stringify(data[i]["file"]),
         })

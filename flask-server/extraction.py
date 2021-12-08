@@ -99,6 +99,9 @@ def extract_file(path, selected_folder, filename, output_dir):
 
         filename: String, unique part of end of filename. Example: "_model_fit.pdf" in PANX_1288_Pm_M_WG_100_JHU_004_LCM3_6_model_fit.pdf
 
+        output_dir: String, path to where extracted files are written to
+
+
     Returns:
         full_path: String, full path to extracted file
     """
@@ -125,6 +128,8 @@ def extract_text(path, data_unique_key, selected_folder, output_dir):
 
         selected_folder: String, name of selected data folder.
             Example: PANX_1280_Lv_M_100-PM-022_LCM2.results.zip
+
+        output_dir: String, path to where extracted files are written to
 
 
     Returns:
@@ -223,6 +228,8 @@ def get_gamma_data(gamma, selected_folder, output_dir):
         selected_folder: String, name of selected data folder.
             Example: PANX_1280_Lv_M_100-PM-022_LCM2.results.zip
 
+        output_dir: String, path to where extracted files are written to
+
     Returns:
         data: List of dictionaries, extracted data from all model_fit files for a given gamma
     """
@@ -243,7 +250,7 @@ def get_gamma_data(gamma, selected_folder, output_dir):
     return data
 
 
-def get_primary_solutions_plots(selected_folder, filename):
+def get_primary_solutions_plots(selected_folder, filename, output_dir):
     """
     Gets primary solutions data for a selected folder
 
@@ -253,6 +260,8 @@ def get_primary_solutions_plots(selected_folder, filename):
 
         filename: String, unique part of end of filename. Example: "_model_fit.pdf" in PANX_1288_Pm_M_WG_100_JHU_004_LCM3_6_model_fit.pdf
 
+        output_dir: String, path to where extracted files are written to
+
     Returns:
         data: List of Strings, each string is a filepath to a primary plot (model_fit or genome_view)
     """
@@ -260,8 +269,6 @@ def get_primary_solutions_plots(selected_folder, filename):
     data = []
     data_path = os.path.join(os.getenv("MALTA_DATA_FOLDER"), selected_folder)
     gammas = get_gamma_options(data_path)
-
-    output_dir = str(os.getenv("MALTA_OUTPUT_FOLDER"))
 
     for gamma in gammas:
         data.append(

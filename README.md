@@ -29,6 +29,7 @@ The following are ordered by the likelihood that they need to be configured by t
 | Field | Type| Description |
 --------|---- | ----------- |
 MALTA_DATA_FOLDER | `String` | Path to folder that contains Sequenza zipfiles
+MALTA_OUTPUT_FOLDER | `String` | Path to where extracted files are written to
 MALTA_DROPDOWN_COUNT | `Integer` | Number of folders available in "Select folder" dropdown
 MALTA_STUDIES | `String`, (later on `List[str]`) | Desired studies. For now, only `PASS01`
 MALTA_LATEST_PROVENANCE | String | Path to latest provenance `.tsv.gz` file

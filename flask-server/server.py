@@ -55,9 +55,17 @@ def send_pdf():
 def send_primary_data(folder_name):
     if request.method == "POST":
         session["selected_data_folder"] = folder_name
-
-        model_fit_data = get_primary_solutions_plots(folder_name, "_model_fit.pdf")
-        genome_view_data = get_primary_solutions_plots(folder_name, "_genome_view.pdf")
+        output_dir = str(os.getenv("MALTA_OUTPUT_FOLDER"))
+        model_fit_data = get_primary_solutions_plots(
+            folder_name,
+            "_model_fit.pdf",
+            output_dir
+        )
+        genome_view_data = get_primary_solutions_plots(
+            folder_name,
+            "_genome_view.pdf",
+            output_dir
+        )
 
         return {"model_fit": model_fit_data, "genome_view": genome_view_data}
     else:

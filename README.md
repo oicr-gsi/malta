@@ -100,7 +100,7 @@ After Sequenza parameter selection has been implemented, Malta can be built out 
 
 ### Query Provenance script
 
-`query_provenance.py`
+`query_provenance.py` is a script to create symlinks to the latest Sequenza zip folders.
 
 ## Copyright and License
 

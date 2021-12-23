@@ -62,21 +62,21 @@ The app should be visible on `http://localhost:3000/`.
 
 ### On HPC Cluster:
 
-- Load `module load python/3.9`
+1. Load `module load python/3.9`
 
-- Clone the repository and `cd malta`
+2. Clone the repository and `cd malta`
 
-- Create a `.env` file and fill it with the required inputs from above. Ensure that it is in the root directory.
+3. Create a `.env` file and fill it with the required inputs from above. Ensure that it is in the root directory.
 
-- pip install --prefix $INSTALL_DIR .
+4. `pip install --prefix $INSTALL_DIR`
 
-- Then update `PATH` and `PYTHONPATH` accordingly:
+5. Then update `PATH` and `PYTHONPATH` accordingly:
 
-  - export` PATH=$INSTALL_DIR/bin:$PATH`
+   - export` PATH=$INSTALL_DIR/bin:$PATH`
 
-  - export `PYTHONPATH=$INSTALL_DIR/lib/$PYTHON_VERSION/site-packages:$PYTHONPATH`, where eg.` $PYTHON_VERSION=python3.8`
+   - export `PYTHONPATH=$INSTALL_DIR/lib/$PYTHON_VERSION/site-packages:$PYTHONPATH`, where for ex.` $PYTHON_VERSION=python3.8`
 
-- Run the setup script: `python3 setup.py install`
+6. Run the setup script: `python3 setup.py install`
 
 - `cd flask-server` and run `python3 test_extraction.py`
 
@@ -101,6 +101,20 @@ After Sequenza parameter selection has been implemented, Malta can be built out 
 ### Query Provenance script
 
 `query_provenance.py` is a script to create symlinks to the latest Sequenza zip folders.
+
+### Setting up on Malta VM
+
+- sudo apt get npm
+
+- follow [steps 4-6](https://github.com/oicr-gsi/malta/blob/95ca8dd19708b37fc68e475203ffcb5753a01e08/README.md#L63) for HPC Cluster
+
+  - install pip3 if it already isn't
+
+- manually `pip3 install flask`
+
+- add `WSGIPythonPath /home/ubuntu/install-dependencies/lib/python3.8/site-packages` to `apache2.conf` so python modules can be found
+
+- had to pip3 install all the dependencies anyways -- **needs to be investigated**
 
 ## Copyright and License
 
